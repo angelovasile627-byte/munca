@@ -255,6 +255,66 @@ frontend:
         agent: "testing"
         comment: "✅ Floating buttons fully functional - both Add Block (red) and Settings (teal) buttons are visible and clickable, successfully open their respective panels"
 
+  - task: "Pages Management Panel"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/PagesPanel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Pages management panel with full CRUD operations: add new pages, edit page names, delete pages, switch between pages. Panel opens from sidebar. Each page maintains its own blocks."
+
+  - task: "Sites Management Panel"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/SitesPanel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Sites management panel with full CRUD operations: create new sites, edit site names, delete sites, switch between sites. Each site contains multiple pages. Panel opens from sidebar."
+
+  - task: "Multi-Site and Multi-Page Context"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/context/BuilderContext.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated BuilderContext to support multiple sites and pages. Each site can have multiple pages, each page has its own blocks. State management handles switching between sites/pages, CRUD operations for both."
+
+  - task: "Sidebar Menu Update"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Sidebar.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Removed Extensions and Help from sidebar menu. Added onClick handlers for Pages and Sites that open respective management panels. Menu now shows: Pages, Sites, and Account."
+
+  - task: "Header Current Page/Site Display"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Header.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated Header to display current page name and current site name with publish status. Dynamically updates when switching pages or sites."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
