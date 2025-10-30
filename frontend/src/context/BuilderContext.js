@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const BuilderContext = createContext();
 
@@ -15,16 +15,30 @@ export const BuilderProvider = ({ children }) => {
   const [blocksPanelOpen, setBlocksPanelOpen] = useState(false);
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
-  const [currentSite, setCurrentSite] = useState({
-    id: '1',
-    name: 'My Site',
-    status: 'unpublished'
-  });
-  const [currentPage, setCurrentPage] = useState({
-    id: '1',
-    name: 'Home',
-    blocks: []
-  });
+  const [pagesPanelOpen, setPagesPanelOpen] = useState(false);
+  const [sitesPanelOpen, setSitesPanelOpen] = useState(false);
+  
+  // Sites management
+  const [sites, setSites] = useState([
+    {
+      id: '1',
+      name: 'My Site',
+      status: 'unpublished',
+      pages: [
+        {
+          id: '1',
+          name: 'Home',
+          blocks: []
+        }
+      ]
+    }
+  ]);
+  const [currentSiteId, setCurrentSiteId] = useState('1');
+  const [currentPageId, setCurrentPageId] = useState('1');
+
+  // Get current site and page
+  const currentSite = sites.find(s => s.id === currentSiteId) || sites[0];
+  const currentPage = currentSite?.pages.find(p => p.id === currentPageId) || currentSite?.pages[0];
 
   const addBlock = (block) => {
     setCurrentPage(prev => ({
