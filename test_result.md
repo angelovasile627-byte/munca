@@ -201,11 +201,14 @@ frontend:
     file: "/app/frontend/src/components/Canvas.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Initial testing - need to verify delete button removes blocks from canvas"
+      - working: "NA"
+        agent: "testing"
+        comment: "⚠️ Delete functionality could not be tested - no blocks were successfully added to canvas due to add block functionality issues, so delete functionality remains untested"
 
   - task: "Settings Panel"
     implemented: true
