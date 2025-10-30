@@ -72,6 +72,7 @@ const Sidebar = () => {
           {menuItems.map((item, index) => (
             <button
               key={index}
+              onClick={item.onClick}
               className="flex items-center justify-between p-4 hover:bg-slate-700 transition-colors border-b border-slate-700"
             >
               <div className="flex flex-col items-start">
@@ -83,7 +84,7 @@ const Sidebar = () => {
                   <span className="text-sm text-gray-400 ml-7">{item.subtitle}</span>
                 )}
               </div>
-              <FiChevronRight className="text-gray-400" />
+              {item.onClick && <FiChevronRight className="text-gray-400" />}
             </button>
           ))}
         </div>
