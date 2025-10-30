@@ -167,15 +167,18 @@ frontend:
 
   - task: "Add Block Functionality"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/components/BlocksPanel.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Initial testing - need to verify clicking on block templates adds them to canvas"
+      - working: false
+        agent: "testing"
+        comment: "❌ Add block functionality has viewport/scrolling issues - blocks panel opens but clicking on block templates fails due to 'Element is outside of the viewport' error. The blocks are visible but not clickable properly."
 
   - task: "Drag & Drop Reordering"
     implemented: true
