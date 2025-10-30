@@ -7,6 +7,7 @@ const Header = () => {
     sidebarOpen, 
     setSidebarOpen, 
     currentSite, 
+    currentPage,
     mobilePreview, 
     setMobilePreview 
   } = useBuilder();
@@ -25,11 +26,13 @@ const Header = () => {
           <div className="w-6 h-6 bg-red-500 rounded flex items-center justify-center text-sm font-bold">
             🏠
           </div>
-          <span className="font-semibold">Home</span>
+          <span className="font-semibold">{currentPage?.name || 'Home'}</span>
         </div>
         <div className="text-sm">
-          <span className="text-red-400">Unpublished</span>
-          <span className="text-gray-400 ml-1">{currentSite.name}</span>
+          <span className={`${currentSite?.status === 'published' ? 'text-green-400' : 'text-red-400'}`}>
+            {currentSite?.status === 'published' ? 'Published' : 'Unpublished'}
+          </span>
+          <span className="text-gray-400 ml-1">{currentSite?.name || 'My Site'}</span>
         </div>
       </div>
 
