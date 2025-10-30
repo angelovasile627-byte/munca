@@ -6,8 +6,6 @@ import Canvas from '../components/Canvas';
 import BlocksPanel from '../components/BlocksPanel';
 import FloatingButtons from '../components/FloatingButtons';
 import SettingsPanel from '../components/SettingsPanel';
-import PagesPanel from '../components/PagesPanel';
-import SitesPanel from '../components/SitesPanel';
 
 const Builder = () => {
   return (
@@ -19,8 +17,6 @@ const Builder = () => {
           <Canvas />
           <BlocksPanel />
           <SettingsPanel />
-          <PagesPanel />
-          <SitesPanel />
           <FloatingButtons />
         </div>
       </div>
