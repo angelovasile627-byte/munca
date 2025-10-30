@@ -15,8 +15,6 @@ export const BuilderProvider = ({ children }) => {
   const [blocksPanelOpen, setBlocksPanelOpen] = useState(false);
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
-  const [pagesPanelOpen, setPagesPanelOpen] = useState(false);
-  const [sitesPanelOpen, setSitesPanelOpen] = useState(false);
   
   // Sites management
   const [sites, setSites] = useState([
