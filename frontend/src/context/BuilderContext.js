@@ -227,14 +227,27 @@ export const BuilderProvider = ({ children }) => {
     setSettingsPanelOpen,
     mobilePreview,
     setMobilePreview,
+    pagesPanelOpen,
+    setPagesPanelOpen,
+    sitesPanelOpen,
+    setSitesPanelOpen,
+    sites,
     currentSite,
-    setCurrentSite,
+    currentSiteId,
     currentPage,
-    setCurrentPage,
+    currentPageId,
     addBlock,
     removeBlock,
     updateBlock,
-    reorderBlocks
+    reorderBlocks,
+    addPage,
+    removePage,
+    updatePage,
+    switchPage,
+    addSite,
+    removeSite,
+    updateSite,
+    switchSite
   };
 
   return (
