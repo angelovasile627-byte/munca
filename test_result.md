@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the Mobirise Builder clone interface functionality including header, hamburger menu, add block button, blocks panel, drag & drop, delete block, settings panel, and mobile preview"
+user_problem_statement: "Implementare funcționalitate Pages și Sites management în aplicația Mobirise Builder clone. Eliminare Extensions și Help din meniu. Implementare panele pentru gestionare pagini multiple și site-uri multiple cu funcționalități complete de CRUD."
 
 frontend:
   - task: "Header Component"
