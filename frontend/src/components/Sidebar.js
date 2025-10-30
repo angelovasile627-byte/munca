@@ -3,33 +3,43 @@ import { FiX, FiChevronRight } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
 const Sidebar = () => {
-  const { sidebarOpen, setSidebarOpen, currentPage } = useBuilder();
+  const { 
+    sidebarOpen, 
+    setSidebarOpen, 
+    currentPage, 
+    currentSite,
+    setPagesPanelOpen,
+    setSitesPanelOpen
+  } = useBuilder();
+
+  const handleMenuClick = (item) => {
+    if (item.title === 'Pages') {
+      setPagesPanelOpen(true);
+      setSidebarOpen(false);
+    } else if (item.title === 'Sites') {
+      setSitesPanelOpen(true);
+      setSidebarOpen(false);
+    }
+  };
 
   const menuItems = [
     {
       title: 'Pages',
-      subtitle: currentPage.name,
-      icon: '📄'
+      subtitle: currentPage?.name || 'Home',
+      icon: '📄',
+      onClick: () => handleMenuClick({ title: 'Pages' })
     },
     {
       title: 'Sites',
-      subtitle: 'My Site',
-      icon: '🌐'
+      subtitle: currentSite?.name || 'My Site',
+      icon: '🌐',
+      onClick: () => handleMenuClick({ title: 'Sites' })
     },
     {
       title: 'Account',
       subtitle: 'angelovasile627@gmail.com',
-      icon: '👤'
-    },
-    {
-      title: 'Extensions',
-      subtitle: '',
-      icon: '🧩'
-    },
-    {
-      title: 'Help',
-      subtitle: '',
-      icon: '❓'
+      icon: '👤',
+      onClick: null
     }
   ];
 
