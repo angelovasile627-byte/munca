@@ -54,6 +54,8 @@ function App() {
       instanceId: `${block.id}_${Date.now()}_${Math.random()}`
     };
     setBlocks([...blocks, newBlock]);
+    setIsBlocksPanelOpen(false);
+    setSelectedBlockForEdit(newBlock);
     toast({
       title: 'Block Added',
       description: `${block.name} has been added to your page.`
