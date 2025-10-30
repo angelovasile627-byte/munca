@@ -6,6 +6,7 @@ import BlocksPanel from './components/BlocksPanel';
 import SidebarMenu from './components/SidebarMenu';
 import CodeViewModal from './components/CodeViewModal';
 import PublishModal from './components/PublishModal';
+import BlockEditorPanel from './components/BlockEditorPanel';
 import { Button } from './components/ui/button';
 import { themes, mockProjects } from './data/mockBlocks';
 import { toast } from './hooks/use-toast';
@@ -21,6 +22,7 @@ function App() {
   const [currentProject, setCurrentProject] = useState(null);
   const [selectedBlockForCode, setSelectedBlockForCode] = useState(null);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [selectedBlockForEdit, setSelectedBlockForEdit] = useState(null);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -52,7 +54,6 @@ function App() {
       instanceId: `${block.id}_${Date.now()}_${Math.random()}`
     };
     setBlocks([...blocks, newBlock]);
-    setIsBlocksPanelOpen(false);
     toast({
       title: 'Block Added',
       description: `${block.name} has been added to your page.`
@@ -61,6 +62,9 @@ function App() {
 
   const handleBlockDelete = (instanceId) => {
     setBlocks(blocks.filter((block) => block.instanceId !== instanceId));
+    if (selectedBlockForEdit?.instanceId === instanceId) {
+      setSelectedBlockForEdit(null);
+    }
     toast({
       title: 'Block Deleted',
       description: 'Block has been removed from your page.'
@@ -87,6 +91,10 @@ function App() {
     const [removed] = newBlocks.splice(dragIndex, 1);
     newBlocks.splice(dropIndex, 0, removed);
     setBlocks(newBlocks);
+  };
+
+  const handleBlockClick = (block) => {
+    setSelectedBlockForEdit(block);
   };
 
   const handleSaveProject = () => {
@@ -154,16 +162,46 @@ function App() {
         onPublish={() => setIsPublishModalOpen(true)}
       />
 
-      <Canvas
-        blocks={blocks}
-        onBlockDelete={handleBlockDelete}
-        onBlockDuplicate={handleBlockDuplicate}
-        onShowCode={setSelectedBlockForCode}
-        onReorderBlock={handleReorderBlock}
-      />
+      <div className="flex flex-1 overflow-hidden">
+        {/* Canvas Area */}
+        <div className={`flex-1 transition-all duration-300 ${isBlocksPanelOpen ? 'mr-[400px]' : ''} ${selectedBlockForEdit ? 'mr-[350px]' : ''}`}>
+          <Canvas
+            blocks={blocks}
+            onBlockDelete={handleBlockDelete}
+            onBlockDuplicate={handleBlockDuplicate}
+            onShowCode={setSelectedBlockForCode}
+            onReorderBlock={handleReorderBlock}
+            onBlockClick={handleBlockClick}
+            selectedBlock={selectedBlockForEdit}
+          />
+        </div>
+
+        {/* Blocks Panel (Right Side) */}
+        <BlocksPanel
+          isOpen={isBlocksPanelOpen}
+          onClose={() => setIsBlocksPanelOpen(false)}
+          onAddBlock={handleAddBlock}
+          currentTheme={currentTheme}
+          themes={themes}
+          onThemeChange={setCurrentTheme}
+        />
+
+        {/* Block Editor Panel (Right Side) */}
+        <BlockEditorPanel
+          isOpen={!!selectedBlockForEdit && !isBlocksPanelOpen}
+          block={selectedBlockForEdit}
+          onClose={() => setSelectedBlockForEdit(null)}
+          onUpdate={(updatedBlock) => {
+            const newBlocks = blocks.map((b) =>
+              b.instanceId === updatedBlock.instanceId ? updatedBlock : b
+            );
+            setBlocks(newBlocks);
+          }}
+        />
+      </div>
 
       {/* Fixed Action Buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3">
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-30">
         <Button
           size="icon"
           className="h-14 w-14 rounded-full bg-[#1ABC9C] hover:bg-[#16A085] shadow-lg"
@@ -173,7 +211,10 @@ function App() {
         </Button>
         <Button
           size="icon"
-          onClick={() => setIsBlocksPanelOpen(true)}
+          onClick={() => {
+            setIsBlocksPanelOpen(!isBlocksPanelOpen);
+            setSelectedBlockForEdit(null);
+          }}
           className="h-16 w-16 rounded-full bg-[#FF3366] hover:bg-[#E62958] shadow-lg text-white text-3xl"
           title="Add Block"
         >
@@ -182,15 +223,6 @@ function App() {
       </div>
 
       {/* Modals */}
-      <BlocksPanel
-        isOpen={isBlocksPanelOpen}
-        onClose={() => setIsBlocksPanelOpen(false)}
-        onAddBlock={handleAddBlock}
-        currentTheme={currentTheme}
-        themes={themes}
-        onThemeChange={setCurrentTheme}
-      />
-
       <SidebarMenu
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
