@@ -164,10 +164,13 @@ function App() {
         onPublish={() => setIsPublishModalOpen(true)}
       />
 
-      <div className="flex flex-1 overflow-hidden">
-        {/* Canvas Area */}\n        <div className={`flex-1 transition-all duration-300 ${
-          (isBlocksPanelOpen || selectedBlockForEdit) ? '' : ''
-        }`}>
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Canvas Area - Shrinks when blocks panel opens */}
+        <div
+          className={`flex-1 transition-all duration-300 ${
+            isBlocksPanelOpen ? 'mr-[600px]' : selectedBlockForEdit ? 'mr-[350px]' : ''
+          }`}
+        >
           <Canvas
             blocks={blocks}
             onBlockDelete={handleBlockDelete}
