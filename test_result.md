@@ -137,15 +137,18 @@ frontend:
 
   - task: "Add Block Button"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/Canvas.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Initial testing - need to verify center red plus button and floating buttons open blocks panel"
+      - working: true
+        agent: "testing"
+        comment: "✅ Add block buttons working correctly - center red plus button in canvas opens blocks panel successfully"
 
   - task: "Blocks Panel"
     implemented: true
