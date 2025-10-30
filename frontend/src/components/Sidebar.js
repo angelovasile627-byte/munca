@@ -382,6 +382,31 @@ const Sidebar = () => {
       </div>
     </>
   );
+
+  return (
+    <>
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40"
+          onClick={() => {
+            setSidebarOpen(false);
+            setCurrentView('main');
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div className={`fixed top-0 left-0 h-full w-80 bg-slate-800 text-white z-50 transition-transform duration-300 flex flex-col ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
+        {currentView === 'main' && renderMainMenu()}
+        {currentView === 'pages' && renderPagesView()}
+        {currentView === 'sites' && renderSitesView()}
+        {currentView === 'page-settings' && renderPageSettingsView()}
+      </div>
+    </>
+  );
 };
 
 export default Sidebar;
