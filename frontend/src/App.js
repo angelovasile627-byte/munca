@@ -165,8 +165,9 @@ function App() {
       />
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Canvas Area */}
-        <div className={`flex-1 transition-all duration-300 ${isBlocksPanelOpen ? 'mr-[400px]' : ''} ${selectedBlockForEdit ? 'mr-[350px]' : ''}`}>
+        {/* Canvas Area */}\n        <div className={`flex-1 transition-all duration-300 ${
+          (isBlocksPanelOpen || selectedBlockForEdit) ? '' : ''
+        }`}>
           <Canvas
             blocks={blocks}
             onBlockDelete={handleBlockDelete}
