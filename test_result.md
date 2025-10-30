@@ -242,15 +242,18 @@ frontend:
 
   - task: "Floating Buttons"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/FloatingButtons.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Initial testing - need to verify floating buttons for add block and settings functionality"
+      - working: true
+        agent: "testing"
+        comment: "✅ Floating buttons fully functional - both Add Block (red) and Settings (teal) buttons are visible and clickable, successfully open their respective panels"
 
 metadata:
   created_by: "testing_agent"
