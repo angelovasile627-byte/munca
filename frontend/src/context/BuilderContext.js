@@ -40,33 +40,182 @@ export const BuilderProvider = ({ children }) => {
   const currentSite = sites.find(s => s.id === currentSiteId) || sites[0];
   const currentPage = currentSite?.pages.find(p => p.id === currentPageId) || currentSite?.pages[0];
 
+  // Block operations
   const addBlock = (block) => {
-    setCurrentPage(prev => ({
-      ...prev,
-      blocks: [...prev.blocks, { ...block, id: Date.now().toString() }]
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        return {
+          ...site,
+          pages: site.pages.map(page => {
+            if (page.id === currentPageId) {
+              return {
+                ...page,
+                blocks: [...page.blocks, { ...block, id: Date.now().toString() }]
+              };
+            }
+            return page;
+          })
+        };
+      }
+      return site;
     }));
   };
 
   const removeBlock = (blockId) => {
-    setCurrentPage(prev => ({
-      ...prev,
-      blocks: prev.blocks.filter(b => b.id !== blockId)
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        return {
+          ...site,
+          pages: site.pages.map(page => {
+            if (page.id === currentPageId) {
+              return {
+                ...page,
+                blocks: page.blocks.filter(b => b.id !== blockId)
+              };
+            }
+            return page;
+          })
+        };
+      }
+      return site;
     }));
   };
 
   const updateBlock = (blockId, updates) => {
-    setCurrentPage(prev => ({
-      ...prev,
-      blocks: prev.blocks.map(b => b.id === blockId ? { ...b, ...updates } : b)
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        return {
+          ...site,
+          pages: site.pages.map(page => {
+            if (page.id === currentPageId) {
+              return {
+                ...page,
+                blocks: page.blocks.map(b => b.id === blockId ? { ...b, ...updates } : b)
+              };
+            }
+            return page;
+          })
+        };
+      }
+      return site;
     }));
   };
 
   const reorderBlocks = (startIndex, endIndex) => {
-    const result = Array.from(currentPage.blocks);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    
-    setCurrentPage(prev => ({ ...prev, blocks: result }));
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        return {
+          ...site,
+          pages: site.pages.map(page => {
+            if (page.id === currentPageId) {
+              const result = Array.from(page.blocks);
+              const [removed] = result.splice(startIndex, 1);
+              result.splice(endIndex, 0, removed);
+              return { ...page, blocks: result };
+            }
+            return page;
+          })
+        };
+      }
+      return site;
+    }));
+  };
+
+  // Page operations
+  const addPage = (pageName) => {
+    const newPage = {
+      id: Date.now().toString(),
+      name: pageName,
+      blocks: []
+    };
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        return {
+          ...site,
+          pages: [...site.pages, newPage]
+        };
+      }
+      return site;
+    }));
+    return newPage.id;
+  };
+
+  const removePage = (pageId) => {
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        const updatedPages = site.pages.filter(p => p.id !== pageId);
+        return {
+          ...site,
+          pages: updatedPages
+        };
+      }
+      return site;
+    }));
+    // Switch to first page if current page is deleted
+    if (pageId === currentPageId && currentSite.pages.length > 1) {
+      const remainingPages = currentSite.pages.filter(p => p.id !== pageId);
+      if (remainingPages.length > 0) {
+        setCurrentPageId(remainingPages[0].id);
+      }
+    }
+  };
+
+  const updatePage = (pageId, updates) => {
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        return {
+          ...site,
+          pages: site.pages.map(p => p.id === pageId ? { ...p, ...updates } : p)
+        };
+      }
+      return site;
+    }));
+  };
+
+  const switchPage = (pageId) => {
+    setCurrentPageId(pageId);
+  };
+
+  // Site operations
+  const addSite = (siteName) => {
+    const newSite = {
+      id: Date.now().toString(),
+      name: siteName,
+      status: 'unpublished',
+      pages: [
+        {
+          id: Date.now().toString() + '-1',
+          name: 'Home',
+          blocks: []
+        }
+      ]
+    };
+    setSites(prev => [...prev, newSite]);
+    return newSite.id;
+  };
+
+  const removeSite = (siteId) => {
+    setSites(prev => prev.filter(s => s.id !== siteId));
+    // Switch to first site if current site is deleted
+    if (siteId === currentSiteId && sites.length > 1) {
+      const remainingSites = sites.filter(s => s.id !== siteId);
+      if (remainingSites.length > 0) {
+        setCurrentSiteId(remainingSites[0].id);
+        setCurrentPageId(remainingSites[0].pages[0].id);
+      }
+    }
+  };
+
+  const updateSite = (siteId, updates) => {
+    setSites(prev => prev.map(s => s.id === siteId ? { ...s, ...updates } : s));
+  };
+
+  const switchSite = (siteId) => {
+    setCurrentSiteId(siteId);
+    const site = sites.find(s => s.id === siteId);
+    if (site && site.pages.length > 0) {
+      setCurrentPageId(site.pages[0].id);
+    }
   };
 
   const value = {
