@@ -322,19 +322,17 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Header Component"
-    - "Hamburger Menu Sidebar"
-    - "Add Block Button"
-    - "Blocks Panel"
-    - "Add Block Functionality"
-    - "Delete Block Functionality"
-    - "Settings Panel"
-    - "Mobile Preview Toggle"
-    - "Floating Buttons"
+    - "Pages Management Panel"
+    - "Sites Management Panel"
+    - "Multi-Site and Multi-Page Context"
+    - "Sidebar Menu Update"
+    - "Header Current Page/Site Display"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
   - agent: "testing"
     message: "Starting comprehensive testing of Mobirise Builder clone interface. Will test all major functionality including UI interactions, panel operations, and block management. Note: Drag & Drop testing will be skipped due to system limitations."
+  - agent: "main"
+    message: "Implemented Pages and Sites management functionality. Removed Extensions and Help from sidebar. Added full CRUD operations for pages and sites. Each site can have multiple pages, each page has its own blocks. Please test: 1) Opening Pages panel from sidebar, 2) Creating/editing/deleting pages, 3) Switching between pages, 4) Opening Sites panel, 5) Creating/editing/deleting sites, 6) Switching between sites, 7) Verify blocks are maintained per page, 8) Verify header updates with current page/site."
