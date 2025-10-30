@@ -1,5 +1,5 @@
-import React from 'react';
-import { FiX, FiChevronRight } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { FiX, FiChevronRight, FiChevronLeft, FiPlus, FiHome, FiSettings, FiCopy, FiTrash2, FiEdit2, FiCheck } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
 const Sidebar = () => {
@@ -8,35 +8,130 @@ const Sidebar = () => {
     setSidebarOpen, 
     currentPage, 
     currentSite,
-    setPagesPanelOpen,
-    setSitesPanelOpen
+    sites,
+    addPage,
+    removePage,
+    updatePage,
+    switchPage,
+    addSite,
+    removeSite,
+    updateSite,
+    switchSite
   } = useBuilder();
 
-  const handleMenuClick = (item) => {
-    if (item.title === 'Pages') {
-      setPagesPanelOpen(true);
-      setSidebarOpen(false);
-    } else if (item.title === 'Sites') {
-      setSitesPanelOpen(true);
-      setSidebarOpen(false);
+  const [currentView, setCurrentView] = useState('main'); // 'main', 'pages', 'sites', 'page-settings'
+  const [selectedPageForSettings, setSelectedPageForSettings] = useState(null);
+  const [newPageName, setNewPageName] = useState('');
+  const [newSiteName, setNewSiteName] = useState('');
+  const [editingPageId, setEditingPageId] = useState(null);
+  const [editingName, setEditingName] = useState('');
+  const [pageSettings, setPageSettings] = useState({
+    title: '',
+    description: '',
+    url: ''
+  });
+
+  const handleBack = () => {
+    if (currentView === 'page-settings') {
+      setCurrentView('pages');
+      setSelectedPageForSettings(null);
+    } else if (currentView === 'pages' || currentView === 'sites') {
+      setCurrentView('main');
+    }
+  };
+
+  const handleMenuClick = (view) => {
+    setCurrentView(view);
+  };
+
+  const handlePageSettingsClick = (page) => {
+    setSelectedPageForSettings(page);
+    setPageSettings({
+      title: page.name,
+      description: page.description || '',
+      url: page.url || 'index.html'
+    });
+    setCurrentView('page-settings');
+  };
+
+  const handleAddPage = () => {
+    if (newPageName.trim()) {
+      addPage(newPageName.trim());
+      setNewPageName('');
+    }
+  };
+
+  const handleAddSite = () => {
+    if (newSiteName.trim()) {
+      addSite(newSiteName.trim());
+      setNewSiteName('');
+    }
+  };
+
+  const handleSelectPage = (pageId) => {
+    switchPage(pageId);
+    setSidebarOpen(false);
+  };
+
+  const handleSelectSite = (siteId) => {
+    switchSite(siteId);
+    setSidebarOpen(false);
+    setCurrentView('main');
+  };
+
+  const handleStartEdit = (page) => {
+    setEditingPageId(page.id);
+    setEditingName(page.name);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingName.trim()) {
+      updatePage(editingPageId, { name: editingName.trim() });
+      setEditingPageId(null);
+      setEditingName('');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingPageId(null);
+    setEditingName('');
+  };
+
+  const handleDeletePage = (pageId) => {
+    if (currentSite.pages.length > 1) {
+      if (window.confirm('Sigur vrei să ștergi această pagină?')) {
+        removePage(pageId);
+      }
+    } else {
+      alert('Nu poți șterge singura pagină!');
+    }
+  };
+
+  const handleDeleteSite = (siteId) => {
+    if (sites.length > 1) {
+      if (window.confirm('Sigur vrei să ștergi acest site?')) {
+        removeSite(siteId);
+      }
+    } else {
+      alert('Nu poți șterge singurul site!');
     }
   };
 
   const menuItems = [
     {
-      title: 'Pages',
+      title: 'Pagini',
       subtitle: currentPage?.name || 'Home',
       icon: '📄',
-      onClick: () => handleMenuClick({ title: 'Pages' })
+      onClick: () => handleMenuClick('pages')
     },
     {
-      title: 'Sites',
+      title: 'Site-uri',
       subtitle: currentSite?.name || 'My Site',
       icon: '🌐',
-      onClick: () => handleMenuClick({ title: 'Sites' })
+      onClick: () => handleMenuClick('sites')
     },
     {
-      title: 'Account',
+      title: 'Cont',
       subtitle: 'angelovasile627@gmail.com',
       icon: '👤',
       onClick: null
