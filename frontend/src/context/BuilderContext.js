@@ -196,6 +196,35 @@ export const BuilderProvider = ({ children }) => {
     setCurrentPageId(pageId);
   };
 
+  // Duplicate page with all content and settings
+  const duplicatePage = (pageId) => {
+    const pageToDuplicate = currentSite.pages.find(p => p.id === pageId);
+    if (!pageToDuplicate) return null;
+
+    const newPage = {
+      ...pageToDuplicate,
+      id: Date.now().toString(),
+      name: `${pageToDuplicate.name} Copy`,
+      pageUrl: `${pageToDuplicate.pageUrl.replace('.html', '')}-copy.html`,
+      blocks: pageToDuplicate.blocks.map(block => ({
+        ...block,
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+      }))
+    };
+
+    setSites(prevSites => prevSites.map(site => {
+      if (site.id === currentSiteId) {
+        return {
+          ...site,
+          pages: [...site.pages, newPage]
+        };
+      }
+      return site;
+    }));
+
+    return newPage.id;
+  };
+
   // Site operations
   const addSite = (siteName) => {
     const newSite = {
