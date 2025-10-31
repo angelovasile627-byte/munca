@@ -66,6 +66,13 @@ const BuilderContent = () => {
             <SettingsPanel />
           </div>
         )}
+
+        {/* Right Site Styles Panel */}
+        {siteStylesPanelOpen && (
+          <div className="w-96">
+            <SiteStylesPanel />
+          </div>
+        )}
       </div>
 
       {/* Publish Dialog */}
