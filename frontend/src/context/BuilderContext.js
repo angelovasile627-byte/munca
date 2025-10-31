@@ -452,7 +452,13 @@ export const BuilderProvider = ({ children }) => {
     canRedo,
     // FTP Settings
     ftpSettings,
-    setFtpSettings
+    setFtpSettings,
+    // Site Styles
+    siteStyles,
+    setSiteStyles,
+    updateSiteStyles,
+    siteStylesPanelOpen,
+    setSiteStylesPanelOpen
   };
 
   return (
