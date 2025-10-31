@@ -6,44 +6,120 @@ const BlocksPanel = () => {
   const { blocksPanelOpen, setBlocksPanelOpen, addBlock } = useBuilder();
 
   const blockTemplates = [
+    // Menu Blocks
+    {
+      type: 'menu',
+      name: 'Menu 1',
+      category: 'Menu',
+      preview: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=80&fit=crop',
+      content: {
+        logo: 'MOBIRISE',
+        links: [
+          { text: 'About', href: '#about' },
+          { text: 'Services', href: '#services' },
+          { text: 'Contacts', href: '#contacts' }
+        ],
+        buttonText: 'Start Now!',
+        style: 'dark'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 2',
+      category: 'Menu',
+      preview: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=80&fit=crop',
+      content: {
+        logo: 'LOGO',
+        links: [
+          { text: 'Home', href: '#home' },
+          { text: 'About', href: '#about' },
+          { text: 'Services', href: '#services' },
+          { text: 'Contact', href: '#contact' }
+        ],
+        buttonText: 'Get Started',
+        style: 'light'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 3',
+      category: 'Menu',
+      preview: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=80&fit=crop',
+      content: {
+        logo: 'BRAND',
+        links: [
+          { text: 'Features', href: '#features' },
+          { text: 'Pricing', href: '#pricing' },
+          { text: 'About', href: '#about' }
+        ],
+        buttonText: 'Sign Up',
+        style: 'gradient'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 4',
+      category: 'Menu',
+      preview: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=400&h=80&fit=crop',
+      content: {
+        logo: 'COMPANY',
+        links: [
+          { text: 'Products', href: '#products' },
+          { text: 'Solutions', href: '#solutions' },
+          { text: 'Support', href: '#support' }
+        ],
+        buttonText: 'Contact Us',
+        style: 'minimal'
+      }
+    },
+    // Header Blocks
     {
       type: 'header',
       name: 'Hero Header',
-      icon: '🌠',
+      category: 'Header',
+      preview: 'https://images.unsplash.com/photo-1557682224-5b8590cd9ec5?w=400&h=200&fit=crop',
       content: {
         title: 'Welcome to Your Website',
         subtitle: 'Build amazing websites with ease',
         buttonText: 'Get Started'
       }
     },
+    // Text Blocks
     {
       type: 'text',
       name: 'Text Block',
-      icon: '📝',
+      category: 'Article',
+      preview: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=200&fit=crop',
       content: {
         heading: 'About Us',
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
       }
     },
+    // Features
     {
       type: 'features',
       name: 'Features Grid',
-      icon: '🎯',
+      category: 'Features',
+      preview: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop',
       content: {}
     },
+    // Image
     {
       type: 'image',
       name: 'Image Block',
-      icon: '🖼️',
+      category: 'Image & Video',
+      preview: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=200&fit=crop',
       content: {
         src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200',
         alt: 'Beautiful image'
       }
     },
+    // Footer
     {
       type: 'footer',
       name: 'Footer',
-      icon: '👇',
+      category: 'Footer',
+      preview: 'https://images.unsplash.com/photo-1557682268-e3955ed5d83f?w=400&h=150&fit=crop',
       content: {}
     }
   ];
