@@ -343,8 +343,6 @@ export const BuilderProvider = ({ children }) => {
   };
 
   const value = {
-    sidebarOpen,
-    setSidebarOpen,
     blocksPanelOpen,
     setBlocksPanelOpen,
     settingsPanelOpen,
