@@ -53,7 +53,8 @@ const BlocksPanel = () => {
       type: template.type,
       content: template.content
     });
-    setBlocksPanelOpen(false);
+    // Nu închide panelul automat - rămâne deschis până când utilizatorul dă click în canvas
+    // setBlocksPanelOpen(false);
   };
 
   return (
