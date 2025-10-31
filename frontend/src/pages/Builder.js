@@ -7,7 +7,7 @@ import Canvas from '../components/Canvas';
 import BlocksPanel from '../components/BlocksPanel';
 import FloatingButtons from '../components/FloatingButtons';
 import SettingsPanel from '../components/SettingsPanel';
-import { Home, Globe, User, Menu } from 'lucide-react';
+import { Home, Globe } from 'lucide-react';
 
 const BuilderContent = () => {
   const { centerPanelView, setCenterPanelView, settingsPanelOpen, setSettingsPanelOpen } = useBuilder();
