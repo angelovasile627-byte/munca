@@ -27,26 +27,13 @@ const Sidebar = () => {
   const [editingName, setEditingName] = useState('');
 
   const handleBack = () => {
-    if (currentView === 'page-settings') {
-      setCurrentView('pages');
-      setSelectedPageForSettings(null);
-    } else if (currentView === 'pages' || currentView === 'sites') {
+    if (currentView === 'pages' || currentView === 'sites') {
       setCurrentView('main');
     }
   };
 
   const handleMenuClick = (view) => {
     setCurrentView(view);
-  };
-
-  const handlePageSettingsClick = (page) => {
-    setSelectedPageForSettings(page);
-    setPageSettings({
-      title: page.name,
-      description: page.description || '',
-      url: page.url || 'index.html'
-    });
-    setCurrentView('page-settings');
   };
 
   const handleAddPage = () => {
