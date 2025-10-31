@@ -96,6 +96,34 @@ class Site(BaseModel):
 class SiteCreate(BaseModel):
     name: str
 
+class FontConfig(BaseModel):
+    family: str = "Inter Tight"
+    size: float = 1.4
+
+class SiteColors(BaseModel):
+    primary: str = "#4CAF50"
+    buttonsAndLinks: List[str] = ["#FF69B4", "#8B4513", "#8B0000", "#48D1CC", "#FFFFFF"]
+
+class SiteFonts(BaseModel):
+    title1: FontConfig = Field(default_factory=lambda: FontConfig(family="Inter Tight", size=5))
+    title2: FontConfig = Field(default_factory=lambda: FontConfig(family="Inter Tight", size=4))
+    title3: FontConfig = Field(default_factory=lambda: FontConfig(family="Inter Tight", size=2))
+    text: FontConfig = Field(default_factory=lambda: FontConfig(family="Inter Tight", size=1.4))
+    menu: FontConfig = Field(default_factory=lambda: FontConfig(family="Inter Tight", size=1.4))
+
+class SiteOptions(BaseModel):
+    roundedCorners: bool = False
+    roundedButtons: bool = False
+    largeButtons: bool = False
+    underlinedLinks: bool = False
+    animationOnScroll: bool = False
+
+class SiteStyles(BaseModel):
+    colors: SiteColors = Field(default_factory=SiteColors)
+    fonts: SiteFonts = Field(default_factory=SiteFonts)
+    options: SiteOptions = Field(default_factory=SiteOptions)
+    customCSS: str = ""
+
 class SiteUpdate(BaseModel):
     name: Optional[str] = None
     status: Optional[str] = None
