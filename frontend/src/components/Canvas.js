@@ -100,7 +100,7 @@ const BlockRenderer = ({ block }) => {
   switch (block.type) {
     case 'header':
       return (
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-20 text-center">
+        <div className="canvas-block bg-gradient-to-r from-blue-600 to-purple-600 text-white p-20 text-center">
           <h1 className="text-5xl font-bold mb-4">{block.content.title || 'Your Title Here'}</h1>
           <p className="text-xl mb-8">{block.content.subtitle || 'Your subtitle here'}</p>
           <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
@@ -111,7 +111,7 @@ const BlockRenderer = ({ block }) => {
     
     case 'text':
       return (
-        <div className="p-12">
+        <div className="canvas-block p-12">
           <h2 className="text-3xl font-bold mb-4">{block.content.heading || 'Heading'}</h2>
           <p className="text-lg text-gray-700">{block.content.text || 'Your text content here. Click to edit.'}</p>
         </div>
@@ -119,7 +119,7 @@ const BlockRenderer = ({ block }) => {
     
     case 'features':
       return (
-        <div className="p-12 bg-gray-50">
+        <div className="canvas-block p-12 bg-gray-50">
           <h2 className="text-4xl font-bold text-center mb-12">Features</h2>
           <div className="grid grid-cols-3 gap-8">
             {[1, 2, 3].map(i => (
@@ -137,7 +137,7 @@ const BlockRenderer = ({ block }) => {
     
     case 'image':
       return (
-        <div className="p-8">
+        <div className="canvas-block p-8">
           <img 
             src={block.content.src || 'https://via.placeholder.com/1200x600'} 
             alt={block.content.alt || 'Image'}
@@ -148,7 +148,7 @@ const BlockRenderer = ({ block }) => {
     
     case 'footer':
       return (
-        <div className="bg-slate-800 text-white p-12">
+        <div className="canvas-block bg-slate-800 text-white p-12">
           <div className="grid grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="font-bold mb-4">Company</h4>
@@ -191,7 +191,7 @@ const BlockRenderer = ({ block }) => {
     
     default:
       return (
-        <div className="p-8 bg-gray-100">
+        <div className="canvas-block p-8 bg-gray-100">
           <p>Unknown block type: {block.type}</p>
         </div>
       );
