@@ -496,6 +496,18 @@ backend:
         agent: "main"
         comment: "Configured FastAPI to serve uploaded images from /uploads directory using StaticFiles middleware."
 
+  - task: "Site Styles API Endpoints"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Site Styles backend: 1) Extended Site model with siteStyles field containing FontConfig, SiteColors, SiteFonts, SiteOptions, SiteStyles models. 2) Created GET /api/sites/{site_id}/styles endpoint to retrieve site styles. 3) Created PUT /api/sites/{site_id}/styles endpoint to update site styles. All styles stored in MongoDB and loaded/saved automatically when switching sites."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
