@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiSmartphone, FiUploadCloud, FiRotateCcw, FiRotateCw, FiEye } from 'react-icons/fi';
+import { FiSmartphone, FiUploadCloud, FiRotateCcw, FiRotateCw, FiEye, FiSettings } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
 const Header = () => {
@@ -9,6 +9,7 @@ const Header = () => {
     mobilePreview, 
     setMobilePreview,
     setPublishDialogOpen,
+    setSettingsPanelOpen,
     undo,
     redo,
     canUndo,
