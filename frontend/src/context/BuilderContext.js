@@ -59,6 +59,14 @@ export const BuilderProvider = ({ children }) => {
   const [currentSiteId, setCurrentSiteId] = useState('1');
   const [currentPageId, setCurrentPageId] = useState('1');
 
+  // Initialize history on first load
+  useEffect(() => {
+    if (history.length === 0) {
+      setHistory([JSON.parse(JSON.stringify(sites))]);
+      setHistoryIndex(0);
+    }
+  }, []);
+
   // Get current site and page
   const currentSite = sites.find(s => s.id === currentSiteId) || sites[0];
   const currentPage = currentSite?.pages.find(p => p.id === currentPageId) || currentSite?.pages[0];
