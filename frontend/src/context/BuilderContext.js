@@ -213,24 +213,16 @@ export const BuilderProvider = ({ children }) => {
   };
 
   const removePage = (pageId) => {
-    console.log('removePage called with pageId:', pageId);
-    console.log('currentSiteId:', currentSiteId);
-    console.log('currentPageId:', currentPageId);
-    
     let newPageId = null;
     
     setSites(prevSites => {
-      console.log('Previous sites:', prevSites);
       const newSites = prevSites.map(site => {
         if (site.id === currentSiteId) {
-          console.log('Found current site, pages:', site.pages);
           const updatedPages = site.pages.filter(p => p.id !== pageId);
-          console.log('Updated pages after filter:', updatedPages);
           
           // Determine the page to switch to if we're deleting the current page
           if (pageId === currentPageId && updatedPages.length > 0) {
             newPageId = updatedPages[0].id;
-            console.log('Will switch to page:', newPageId);
           }
           
           return {
@@ -241,13 +233,11 @@ export const BuilderProvider = ({ children }) => {
         return site;
       });
       
-      console.log('New sites:', newSites);
       return newSites;
     });
     
     // Switch to the new page if needed
     if (newPageId) {
-      console.log('Switching to new page:', newPageId);
       setCurrentPageId(newPageId);
     }
   };
