@@ -139,6 +139,345 @@ async def get_status_checks():
     
     return status_checks
 
+
+# ============= SITES ENDPOINTS =============
+
+@api_router.post("/sites", response_model=Site)
+async def create_site(site_input: SiteCreate):
+    """Create a new site with a default Home page"""
+    # Create default home page
+    home_page = Page(
+        id=str(uuid.uuid4()),
+        name="Home",
+        pageUrl="index.html",
+        blocks=[]
+    )
+    
+    # Create site
+    site = Site(
+        id=str(uuid.uuid4()),
+        name=site_input.name,
+        status="unpublished",
+        pages=[home_page]
+    )
+    
+    # Convert to dict for MongoDB
+    site_dict = site.model_dump()
+    site_dict['createdAt'] = site_dict['createdAt'].isoformat()
+    site_dict['updatedAt'] = site_dict['updatedAt'].isoformat()
+    
+    await db.sites.insert_one(site_dict)
+    return site
+
+@api_router.get("/sites", response_model=List[Site])
+async def get_sites():
+    """Get all sites"""
+    sites = await db.sites.find({}, {"_id": 0}).to_list(1000)
+    
+    # Convert ISO timestamps back to datetime
+    for site in sites:
+        if isinstance(site.get('createdAt'), str):
+            site['createdAt'] = datetime.fromisoformat(site['createdAt'])
+        if isinstance(site.get('updatedAt'), str):
+            site['updatedAt'] = datetime.fromisoformat(site['updatedAt'])
+    
+    return sites
+
+@api_router.get("/sites/{site_id}", response_model=Site)
+async def get_site(site_id: str):
+    """Get a specific site by ID"""
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Convert ISO timestamps
+    if isinstance(site.get('createdAt'), str):
+        site['createdAt'] = datetime.fromisoformat(site['createdAt'])
+    if isinstance(site.get('updatedAt'), str):
+        site['updatedAt'] = datetime.fromisoformat(site['updatedAt'])
+    
+    return site
+
+@api_router.put("/sites/{site_id}", response_model=Site)
+async def update_site(site_id: str, site_update: SiteUpdate):
+    """Update site details"""
+    update_data = {k: v for k, v in site_update.model_dump().items() if v is not None}
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No update data provided")
+    
+    update_data['updatedAt'] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.sites.update_one(
+        {"id": site_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    return await get_site(site_id)
+
+@api_router.delete("/sites/{site_id}")
+async def delete_site(site_id: str):
+    """Delete a site"""
+    result = await db.sites.delete_one({"id": site_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    return {"message": "Site deleted successfully"}
+
+
+# ============= PAGES ENDPOINTS =============
+
+@api_router.post("/sites/{site_id}/pages", response_model=Page)
+async def create_page(site_id: str, page_input: PageCreate):
+    """Create a new page in a site"""
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Create new page
+    new_page = Page(
+        id=str(uuid.uuid4()),
+        name=page_input.name,
+        pageUrl=page_input.pageUrl or f"{page_input.name.lower().replace(' ', '-')}.html",
+        blocks=[]
+    )
+    
+    # Add page to site
+    await db.sites.update_one(
+        {"id": site_id},
+        {
+            "$push": {"pages": new_page.model_dump()},
+            "$set": {"updatedAt": datetime.now(timezone.utc).isoformat()}
+        }
+    )
+    
+    return new_page
+
+@api_router.put("/sites/{site_id}/pages/{page_id}", response_model=Page)
+async def update_page(site_id: str, page_id: str, page_update: PageUpdate):
+    """Update a page's settings and content"""
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Find the page to update
+    page_found = False
+    for i, page in enumerate(site['pages']):
+        if page['id'] == page_id:
+            page_found = True
+            # Update only provided fields
+            update_data = {k: v for k, v in page_update.model_dump().items() if v is not None}
+            
+            for key, value in update_data.items():
+                site['pages'][i][key] = value
+            
+            break
+    
+    if not page_found:
+        raise HTTPException(status_code=404, detail="Page not found")
+    
+    # Save updated site
+    await db.sites.update_one(
+        {"id": site_id},
+        {
+            "$set": {
+                "pages": site['pages'],
+                "updatedAt": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Return updated page
+    updated_page = next((p for p in site['pages'] if p['id'] == page_id), None)
+    return Page(**updated_page)
+
+@api_router.delete("/sites/{site_id}/pages/{page_id}")
+async def delete_page(site_id: str, page_id: str):
+    """Delete a page from a site"""
+    result = await db.sites.update_one(
+        {"id": site_id},
+        {
+            "$pull": {"pages": {"id": page_id}},
+            "$set": {"updatedAt": datetime.now(timezone.utc).isoformat()}
+        }
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    return {"message": "Page deleted successfully"}
+
+
+# ============= IMAGE UPLOAD ENDPOINT =============
+
+@api_router.post("/upload-image")
+async def upload_image(file: UploadFile = File(...)):
+    """Upload an image for social sharing"""
+    # Validate file type
+    allowed_types = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
+    if file.content_type not in allowed_types:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid file type. Allowed types: {', '.join(allowed_types)}"
+        )
+    
+    # Generate unique filename
+    file_extension = file.filename.split('.')[-1]
+    unique_filename = f"{uuid.uuid4()}.{file_extension}"
+    file_path = UPLOAD_DIR / unique_filename
+    
+    # Save file
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+    
+    # Return URL
+    backend_url = os.environ.get('BACKEND_URL', 'http://localhost:8001')
+    image_url = f"{backend_url}/uploads/{unique_filename}"
+    
+    return {"imageUrl": image_url, "filename": unique_filename}
+
+
+# ============= HTML EXPORT ENDPOINT =============
+
+@api_router.get("/sites/{site_id}/pages/{page_id}/export")
+async def export_page_html(site_id: str, page_id: str):
+    """Export a page as complete HTML file"""
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Find the page
+    page = next((p for p in site['pages'] if p['id'] == page_id), None)
+    if not page:
+        raise HTTPException(status_code=404, detail="Page not found")
+    
+    # Generate HTML
+    html_content = generate_html_export(page, site['name'])
+    
+    # Save to temp file and return
+    temp_file = UPLOAD_DIR / f"{page['name'].lower().replace(' ', '-')}-export.html"
+    
+    async with aiofiles.open(temp_file, 'w', encoding='utf-8') as f:
+        await f.write(html_content)
+    
+    return FileResponse(
+        path=temp_file,
+        filename=f"{page['name']}.html",
+        media_type="text/html"
+    )
+
+
+def generate_html_export(page: Dict[str, Any], site_name: str) -> str:
+    """Generate complete HTML from page data"""
+    
+    # Build blocks HTML
+    blocks_html = ""
+    for block in page.get('blocks', []):
+        if block['type'] == 'hero':
+            blocks_html += f"""
+    <section class="hero">
+        <h1>{block.get('content', 'Hero Section')}</h1>
+    </section>
+"""
+        elif block['type'] == 'text':
+            blocks_html += f"""
+    <section class="text-block">
+        <p>{block.get('content', 'Text content')}</p>
+    </section>
+"""
+        elif block['type'] == 'features':
+            blocks_html += """
+    <section class="features">
+        <div class="feature-grid">
+            <div class="feature">Feature 1</div>
+            <div class="feature">Feature 2</div>
+            <div class="feature">Feature 3</div>
+        </div>
+    </section>
+"""
+        elif block['type'] == 'image':
+            blocks_html += f"""
+    <section class="image-block">
+        <img src="{block.get('content', 'placeholder.jpg')}" alt="Image">
+    </section>
+"""
+        elif block['type'] == 'footer':
+            blocks_html += """
+    <footer>
+        <p>&copy; 2025 All rights reserved</p>
+    </footer>
+"""
+    
+    # Build meta tags
+    meta_tags = f"""
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{page.get('name', 'Page')}</title>"""
+    
+    if page.get('pageDescription'):
+        meta_tags += f"""
+    <meta name="description" content="{page['pageDescription']}">"""
+    
+    if page.get('socialSharingEnabled') and page.get('socialSharingImageUrl'):
+        meta_tags += f"""
+    <meta property="og:image" content="{page['socialSharingImageUrl']}">
+    <meta property="og:title" content="{page.get('name', 'Page')}">
+    <meta property="og:description" content="{page.get('pageDescription', '')}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{page['socialSharingImageUrl']}">"""
+    
+    # Build complete HTML
+    html = ""
+    
+    # Before DOCTYPE code
+    if page.get('beforeDoctypeCode'):
+        html += page['beforeDoctypeCode'] + "\n"
+    
+    html += f"""<!DOCTYPE html>
+<html lang="en">
+<head>{meta_tags}
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; }}
+        .hero {{ background: #007bff; color: white; padding: 100px 20px; text-align: center; }}
+        .text-block {{ padding: 50px 20px; }}
+        .features {{ padding: 50px 20px; }}
+        .feature-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }}
+        .feature {{ padding: 20px; border: 1px solid #ddd; border-radius: 8px; }}
+        .image-block {{ text-align: center; padding: 20px; }}
+        .image-block img {{ max-width: 100%; height: auto; }}
+        footer {{ background: #333; color: white; text-align: center; padding: 20px; }}
+    </style>"""
+    
+    # Inside <head> code
+    if page.get('headCode'):
+        html += "\n    " + page['headCode']
+    
+    html += f"""
+</head>
+<body>
+{blocks_html}"""
+    
+    # End of <body> code
+    if page.get('bodyEndCode'):
+        html += "\n    " + page['bodyEndCode']
+    
+    html += """
+</body>
+</html>"""
+    
+    return html
+
 # Include the router in the main app
 app.include_router(api_router)
 
