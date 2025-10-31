@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { FiX, FiDownload, FiServer, FiSettings, FiSave, FiFolderPlus } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
+import { useToast } from '../context/ToastContext';
 import FTPManagerDialog from './FTPManagerDialog';
 
 const PublishDialog = () => {
   const { publishDialogOpen, setPublishDialogOpen, currentSite, currentPage, sites, setSites, setCurrentSiteId, setCurrentPageId } = useBuilder();
+  const { showSuccess, showError, showInfo } = useToast();
   const [publishMethod, setPublishMethod] = useState('project'); // 'project', 'local', 'ftp'
   const [publishOnlyChanges, setPublishOnlyChanges] = useState(false);
   const [ftpManagerOpen, setFtpManagerOpen] = useState(false);
