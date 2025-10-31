@@ -13,6 +13,7 @@ export const useBuilder = () => {
 export const BuilderProvider = ({ children }) => {
   const [blocksPanelOpen, setBlocksPanelOpen] = useState(false);
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
+  const [siteStylesPanelOpen, setSiteStylesPanelOpen] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
   const [centerPanelView, setCenterPanelView] = useState(null); // 'pages', 'sites', 'settings', null - Start with null (closed)
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
@@ -30,6 +31,29 @@ export const BuilderProvider = ({ children }) => {
     username: '',
     password: '',
     rootFolder: ''
+  });
+
+  // Site Styles State
+  const [siteStyles, setSiteStyles] = useState({
+    colors: {
+      primary: '#4CAF50',
+      buttonsAndLinks: ['#FF69B4', '#8B4513', '#8B0000', '#48D1CC', '#FFFFFF']
+    },
+    fonts: {
+      title1: { family: 'Inter Tight', size: 5 },
+      title2: { family: 'Inter Tight', size: 4 },
+      title3: { family: 'Inter Tight', size: 2 },
+      text: { family: 'Inter Tight', size: 1.4 },
+      menu: { family: 'Inter Tight', size: 1.4 }
+    },
+    options: {
+      roundedCorners: false,
+      roundedButtons: false,
+      largeButtons: false,
+      underlinedLinks: false,
+      animationOnScroll: false
+    },
+    customCSS: ''
   });
   
   // Sites management
