@@ -20,17 +20,11 @@ const Sidebar = () => {
     setSettingsPanelOpen
   } = useBuilder();
 
-  const [currentView, setCurrentView] = useState('main'); // 'main', 'pages', 'sites', 'page-settings'
-  const [selectedPageForSettings, setSelectedPageForSettings] = useState(null);
+  const [currentView, setCurrentView] = useState('main'); // 'main', 'pages', 'sites'
   const [newPageName, setNewPageName] = useState('');
   const [newSiteName, setNewSiteName] = useState('');
   const [editingPageId, setEditingPageId] = useState(null);
   const [editingName, setEditingName] = useState('');
-  const [pageSettings, setPageSettings] = useState({
-    title: '',
-    description: '',
-    url: ''
-  });
 
   const handleBack = () => {
     if (currentView === 'page-settings') {
