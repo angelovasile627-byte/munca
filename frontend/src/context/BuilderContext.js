@@ -16,6 +16,22 @@ export const BuilderProvider = ({ children }) => {
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
   const [centerPanelView, setCenterPanelView] = useState(null); // 'pages', 'sites', 'settings', null - Start with null (closed)
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
+  
+  // History management for undo/redo
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  
+  // FTP settings
+  const [ftpSettings, setFtpSettings] = useState({
+    protocol: 'FTP',
+    host: '',
+    port: 21,
+    username: '',
+    password: '',
+    rootFolder: ''
+  });
   
   // Sites management
   const [sites, setSites] = useState([
