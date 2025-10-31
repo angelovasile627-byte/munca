@@ -69,6 +69,9 @@ const BuilderContent = () => {
 
       {/* Publish Dialog */}
       <PublishDialog />
+      
+      {/* Preview Modal */}
+      <PreviewModal />
     </div>
   );
 };
