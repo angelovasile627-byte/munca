@@ -63,9 +63,18 @@ Codul se inserează pe prima linie, înainte de `<!DOCTYPE html>`
 
 ## 🎨 Cum se Folosește
 
-### Deschidere Setări Pagină
+### Accesare Setări Pagină - 2 Metode:
+
+**Metoda 1: Din Meniul Lateral (Recomandat - ca în Mobirise)**
+1. Click pe butonul **hamburger** (☰) din stânga sus
+2. Click pe **"Pagini"** în meniu
+3. Vezi lista tuturor paginilor site-ului
+4. Click pe iconița **⚙️ Settings** lângă pagina dorită
+5. Se deschide panoul mare din dreapta cu toate setările
+
+**Metoda 2: Direct din Buton Floating**
 1. Click pe butonul **turcoaz** (Settings) din colțul dreapta-jos
-2. Se deschide panoul lateral cu setările
+2. Se deschide direct panoul de setări pentru pagina curentă
 
 ### Editare Setări
 1. **General Tab:**
