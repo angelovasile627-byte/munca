@@ -363,6 +363,42 @@ frontend:
         agent: "main"
         comment: "Added updatePageSettings function in BuilderContext to save all page settings (title, URL, description, social sharing, code injection) per page. Each page maintains its own settings."
 
+  - task: "Remove Hamburger Menu Button"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Header.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Removed unused hamburger menu button (FiMenu) from Header component. This button was no longer needed as the new sidebar layout replaced it with icon buttons on the left side."
+
+  - task: "Fix Page Deletion"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/context/BuilderContext.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed removePage function to properly handle page switching when deleting current page. Now correctly switches to remaining page and uses updated state instead of stale closure values."
+
+  - task: "Preview Modal Implementation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/PreviewModal.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created PreviewModal component that displays current page in full-screen preview mode. Shows all page blocks rendered without edit controls, supports mobile preview width, includes close button. Integrated into Builder.js."
+
 backend:
   - task: "Sites CRUD API Endpoints"
     implemented: true
