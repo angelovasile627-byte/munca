@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { FiX, FiDownload, FiServer, FiSettings } from 'react-icons/fi';
+import React, { useState, useRef } from 'react';
+import { FiX, FiDownload, FiServer, FiSettings, FiSave, FiFolderPlus } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 import FTPManagerDialog from './FTPManagerDialog';
 
 const PublishDialog = () => {
-  const { publishDialogOpen, setPublishDialogOpen, currentSite, currentPage } = useBuilder();
-  const [publishMethod, setPublishMethod] = useState('local'); // 'local', 'ftp'
+  const { publishDialogOpen, setPublishDialogOpen, currentSite, currentPage, sites, setSites, setCurrentSiteId, setCurrentPageId } = useBuilder();
+  const [publishMethod, setPublishMethod] = useState('project'); // 'project', 'local', 'ftp'
   const [publishOnlyChanges, setPublishOnlyChanges] = useState(false);
   const [ftpManagerOpen, setFtpManagerOpen] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const fileInputRef = useRef(null);
 
   if (!publishDialogOpen) return null;
 
