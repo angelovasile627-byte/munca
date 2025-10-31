@@ -170,6 +170,13 @@ const PagesPanel = () => {
                     <Settings className="w-4 h-4" />
                   </button>
                   <button
+                    onClick={() => handleDuplicatePage(page.id)}
+                    className="p-1 hover:bg-gray-700 rounded text-gray-400 hover:text-white"
+                    title="Duplică pagina"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                  <button
                     onClick={() => startEditing(page)}
                     className="p-1 hover:bg-gray-700 rounded text-gray-400 hover:text-white"
                     title="Editează"
