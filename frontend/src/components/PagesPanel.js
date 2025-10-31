@@ -221,6 +221,18 @@ const PagesPanel = () => {
           </div>
         ))}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => {
+          setDeleteConfirmOpen(false);
+          setPageToDelete(null);
+        }}
+        onConfirm={confirmDeletePage}
+        title="Șterge Pagina"
+        message="Sigur doriți să ștergeți această pagină? Această acțiune nu poate fi anulată."
+      />
     </div>
   );
 };
