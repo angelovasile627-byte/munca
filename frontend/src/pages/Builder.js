@@ -7,12 +7,13 @@ import Canvas from '../components/Canvas';
 import BlocksPanel from '../components/BlocksPanel';
 import FloatingButtons from '../components/FloatingButtons';
 import SettingsPanel from '../components/SettingsPanel';
+import SiteStylesPanel from '../components/SiteStylesPanel';
 import PublishDialog from '../components/PublishDialog';
 import PreviewModal from '../components/PreviewModal';
 import { Home, Globe } from 'lucide-react';
 
 const BuilderContent = () => {
-  const { centerPanelView, setCenterPanelView, settingsPanelOpen, setSettingsPanelOpen } = useBuilder();
+  const { centerPanelView, setCenterPanelView, settingsPanelOpen, setSettingsPanelOpen, siteStylesPanelOpen } = useBuilder();
 
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-gray-900">
