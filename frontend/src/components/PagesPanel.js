@@ -160,7 +160,8 @@ const PagesPanel = () => {
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       switchPage(page.id);
                       setSettingsPanelOpen(true);
                     }}
@@ -170,21 +171,30 @@ const PagesPanel = () => {
                     <Settings className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => handleDuplicatePage(page.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDuplicatePage(page.id);
+                    }}
                     className="p-1 hover:bg-gray-700 rounded text-gray-400 hover:text-white"
                     title="Duplică pagina"
                   >
                     <Copy className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => startEditing(page)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      startEditing(page);
+                    }}
                     className="p-1 hover:bg-gray-700 rounded text-gray-400 hover:text-white"
                     title="Editează"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => handleDeletePage(page.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeletePage(page.id);
+                    }}
                     className="p-1 hover:bg-gray-700 rounded text-red-400 hover:text-red-300"
                     title="Șterge"
                   >
