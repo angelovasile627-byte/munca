@@ -44,12 +44,19 @@ const PagesPanel = () => {
     console.log('Pages length:', currentSite.pages.length);
     
     if (currentSite.pages.length > 1) {
-      if (window.confirm('Sigur doriți să ștergeți această pagină?')) {
-        console.log('User confirmed deletion, calling removePage');
-        removePage(pageId);
-      }
+      setPageToDelete(pageId);
+      setDeleteConfirmOpen(true);
     } else {
-      alert('Nu puteți șterge ultima pagină!');
+      // Can't use alert in sandbox, just log or use toast
+      console.warn('Nu puteți șterge ultima pagină!');
+    }
+  };
+
+  const confirmDeletePage = () => {
+    if (pageToDelete) {
+      console.log('User confirmed deletion, calling removePage');
+      removePage(pageToDelete);
+      setPageToDelete(null);
     }
   };
 
