@@ -26,7 +26,15 @@ export const BuilderProvider = ({ children }) => {
         {
           id: '1',
           name: 'Home',
-          blocks: []
+          blocks: [],
+          // Page settings
+          pageUrl: 'index.html',
+          pageDescription: '',
+          socialSharingEnabled: true,
+          socialSharingImageUrl: '',
+          headCode: '',
+          bodyEndCode: '',
+          beforeDoctypeCode: ''
         }
       ]
     }
