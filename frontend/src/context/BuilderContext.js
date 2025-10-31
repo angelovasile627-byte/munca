@@ -300,6 +300,7 @@ export const BuilderProvider = ({ children }) => {
     updatePage,
     updatePageSettings,
     switchPage,
+    duplicatePage,
     addSite,
     removeSite,
     updateSite,
