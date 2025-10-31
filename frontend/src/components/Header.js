@@ -1,11 +1,9 @@
 import React from 'react';
-import { FiMenu, FiSmartphone, FiUploadCloud, FiRotateCcw, FiRotateCw, FiEye } from 'react-icons/fi';
+import { FiSmartphone, FiUploadCloud, FiRotateCcw, FiRotateCw, FiEye } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
 const Header = () => {
   const { 
-    sidebarOpen, 
-    setSidebarOpen, 
     currentSite, 
     currentPage,
     mobilePreview, 
@@ -22,13 +20,6 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 h-14 bg-slate-700 text-white flex items-center justify-between px-4 z-50">
       {/* Left Section */}
       <div className="flex items-center gap-3">
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 hover:bg-slate-600 rounded transition-colors"
-          aria-label="Toggle Menu"
-        >
-          <FiMenu size={20} />
-        </button>
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 bg-red-500 rounded flex items-center justify-center text-sm font-bold">
             🏠
