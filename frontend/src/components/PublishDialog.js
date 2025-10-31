@@ -96,6 +96,11 @@ const PublishDialog = () => {
   };
 
   const handlePublish = async () => {
+    if (publishMethod === 'project') {
+      await handleExportProject();
+      return;
+    }
+    
     setIsPublishing(true);
     
     try {
@@ -120,7 +125,6 @@ const PublishDialog = () => {
           window.URL.revokeObjectURL(url);
           document.body.removeChild(a);
           
-          alert('Site exported successfully!');
           setPublishDialogOpen(false);
         } else {
           alert('Failed to export site');
