@@ -478,6 +478,134 @@ def generate_html_export(page: Dict[str, Any], site_name: str) -> str:
     
     return html
 
+
+# ============= ZIP EXPORT ENDPOINT =============
+
+@api_router.get("/sites/{site_id}/export-zip")
+async def export_site_as_zip(site_id: str):
+    """Export entire site as ZIP file"""
+    import zipfile
+    import io
+    from fastapi.responses import StreamingResponse
+    
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Create a ZIP file in memory
+    zip_buffer = io.BytesIO()
+    
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        # Export each page as HTML
+        for page in site.get('pages', []):
+            html_content = generate_html_export(page, site['name'])
+            page_filename = f"{page.get('pageUrl', f'{page[\"name\"]}.html')}"
+            zip_file.writestr(page_filename, html_content)
+        
+        # Add a README file
+        readme_content = f"""# {site['name']}
+
+This site was exported from Mobirise Builder Clone.
+
+Pages included:
+{chr(10).join([f"- {page['name']}: {page.get('pageUrl', page['name'] + '.html')}" for page in site.get('pages', [])])}
+
+To use this site:
+1. Extract all files to your web server
+2. Open index.html in your browser
+
+Generated on: {datetime.now(timezone.utc).isoformat()}
+"""
+        zip_file.writestr("README.txt", readme_content)
+    
+    # Reset buffer position
+    zip_buffer.seek(0)
+    
+    # Return as streaming response
+    return StreamingResponse(
+        io.BytesIO(zip_buffer.getvalue()),
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": f"attachment; filename={site['name'].replace(' ', '-')}.zip"
+        }
+    )
+
+
+# ============= FTP ENDPOINTS =============
+
+class FTPSettings(BaseModel):
+    protocol: str = "FTP"
+    host: str
+    port: int = 21
+    username: str
+    password: str
+    rootFolder: str = ""
+
+
+@api_router.post("/ftp/test-connection")
+async def test_ftp_connection(settings: FTPSettings):
+    """Test FTP connection"""
+    import ftplib
+    from contextlib import closing
+    
+    try:
+        if settings.protocol == "FTP":
+            with closing(ftplib.FTP()) as ftp:
+                ftp.connect(settings.host, settings.port, timeout=10)
+                ftp.login(settings.username, settings.password)
+                
+                # Try to change to root folder if specified
+                if settings.rootFolder:
+                    ftp.cwd(settings.rootFolder)
+                
+                return {
+                    "success": True,
+                    "message": f"Successfully connected to {settings.host}"
+                }
+        else:
+            # For FTPS/SFTP, we'd need additional libraries
+            return {
+                "success": False,
+                "message": f"{settings.protocol} not yet implemented. Please use FTP for now."
+            }
+    except ftplib.error_perm as e:
+        raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Connection failed: {str(e)}")
+
+
+@api_router.post("/sites/{site_id}/publish-ftp")
+async def publish_site_via_ftp(site_id: str, settings: Dict[str, Any]):
+    """Publish site via FTP"""
+    import ftplib
+    from contextlib import closing
+    import io
+    
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Get FTP settings from request or use stored settings
+    # For now, we'll return a message that FTP settings need to be configured
+    
+    try:
+        # Note: In a real implementation, you'd:
+        # 1. Get FTP credentials from settings
+        # 2. Connect to FTP server
+        # 3. Upload all HTML files
+        # 4. Upload assets (images, etc.)
+        
+        return {
+            "success": True,
+            "message": "FTP publishing feature requires FTP credentials. Please configure in FTP Manager first.",
+            "note": "This is a simulated response. Full FTP implementation requires secure credential storage."
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"FTP publish failed: {str(e)}")
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
