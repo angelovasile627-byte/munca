@@ -336,6 +336,10 @@ export const BuilderProvider = ({ children }) => {
     setCenterPanelView,
     mobilePreview,
     setMobilePreview,
+    publishDialogOpen,
+    setPublishDialogOpen,
+    previewMode,
+    setPreviewMode,
     sites,
     currentSite,
     currentSiteId,
@@ -354,7 +358,15 @@ export const BuilderProvider = ({ children }) => {
     addSite,
     removeSite,
     updateSite,
-    switchSite
+    switchSite,
+    // Undo/Redo
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    // FTP Settings
+    ftpSettings,
+    setFtpSettings
   };
 
   return (
