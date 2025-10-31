@@ -33,7 +33,7 @@ const Canvas = () => {
       className={`flex-1 bg-gray-100 overflow-auto p-8 transition-all duration-300 ${blocksPanelOpen ? 'mr-80' : 'mr-0'}`}
       onClick={handleCanvasClick}
     >
-      <div className={`mx-auto bg-white shadow-lg min-h-[800px] ${canvasWidth} transition-all duration-300`}>
+      <div className={`mx-auto bg-white shadow-lg min-h-[800px] ${canvasWidth} transition-all duration-300 canvas-container`}>
         {currentPage.blocks.length === 0 ? (
           // Empty State
           <div className="flex flex-col items-center justify-center h-[800px] text-center">
