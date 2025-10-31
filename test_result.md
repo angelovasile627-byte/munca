@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Implementare funcționalitate Pages și Sites management în aplicația Mobirise Builder clone. Eliminare Extensions și Help din meniu. Implementare panele pentru gestionare pagini multiple și site-uri multiple cu funcționalități complete de CRUD."
+user_problem_statement: "Implementare funcționalitate Pages și Sites management în aplicația Mobirise Builder clone. Eliminare Extensions și Help din meniu. Implementare panele pentru gestionare pagini multiple și site-uri multiple cu funcționalități complete de CRUD. Adăugare setări complete de pagină (Page Settings) similare Mobirise: SEO (title, description, URL, social sharing image), Code Injection (inside <head>, end of <body>, before <!DOCTYPE>), și funcționalitate export HTML."
 
 frontend:
   - task: "Header Component"
