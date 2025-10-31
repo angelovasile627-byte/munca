@@ -205,167 +205,169 @@ const SettingsPanel = () => {
           </div>
         )}
 
-          {/* SEO TAB */}
-          {activeTab === 'seo' && (
-            <div className="space-y-6">
-              {/* Google Preview */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Google Preview:
-                </label>
-                <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
-                  <div className="flex gap-2 mb-3">
-                    <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded">DESKTOP</button>
-                    <button className="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded">MOBILE</button>
-                  </div>
-                  <div className="bg-white p-3 rounded border">
-                    <div className="text-blue-600 text-sm mb-1">{settings.name || 'Home'}</div>
-                    <div className="text-gray-500 text-xs">https://yoursite.com/</div>
-                    <div className="text-gray-600 text-sm mt-2">
-                      {settings.pageDescription || 'Your page description will appear here...'}
-                    </div>
+        {/* SEO TAB */}
+        {activeTab === 'seo' && (
+          <div className="space-y-6">
+            {/* Google Preview */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                Google Preview:
+              </label>
+              <div className="border border-gray-600 rounded-lg p-4 bg-gray-700">
+                <div className="flex gap-2 mb-3">
+                  <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded">DESKTOP</button>
+                  <button className="px-3 py-1 text-sm bg-gray-600 text-gray-300 rounded">MOBILE</button>
+                </div>
+                <div className="bg-white p-3 rounded border">
+                  <div className="text-blue-600 text-sm mb-1">{settings.name || 'Home'}</div>
+                  <div className="text-gray-500 text-xs">https://yoursite.com/</div>
+                  <div className="text-gray-600 text-sm mt-2">
+                    {settings.pageDescription || 'Your page description will appear here...'}
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Social Sharing Image */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-semibold text-gray-700">
-                    Social Sharing Image:
-                  </label>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={settings.socialSharingEnabled}
-                      onChange={(e) => handleInputChange('socialSharingEnabled', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
+            {/* Social Sharing Image */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-semibold text-gray-300">
+                  Social Sharing Image:
+                </label>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={settings.socialSharingEnabled}
+                    onChange={(e) => handleInputChange('socialSharingEnabled', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
 
-                {settings.socialSharingEnabled && (
-                  <>
-                    {settings.socialSharingImageUrl ? (
-                      <div className="relative">
-                        <img
-                          src={settings.socialSharingImageUrl}
-                          alt="Social sharing"
-                          className="w-full h-48 object-cover rounded-lg border"
-                        />
-                        <button
-                          onClick={() => handleInputChange('socialSharingImageUrl', '')}
-                          className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
-                        >
-                          <FiX size={16} />
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        onClick={() => fileInputRef.current?.click()}
-                        className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors"
-                      >
-                        <FiImage className="mx-auto mb-2 text-gray-400" size={32} />
-                        <p className="text-gray-500">
-                          {uploading ? 'Uploading...' : 'Click to upload image'}
-                        </p>
-                      </div>
-                    )}
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-
-                    <div className="mt-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Social Sharing Image URL:
-                      </label>
-                      <input
-                        type="text"
-                        value={settings.socialSharingImageUrl}
-                        onChange={(e) => handleInputChange('socialSharingImageUrl', e.target.value)}
-                        placeholder="https://pixabay.com/illustrations/background-texture-abstract"
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              {settings.socialSharingEnabled && (
+                <>
+                  {settings.socialSharingImageUrl ? (
+                    <div className="relative">
+                      <img
+                        src={settings.socialSharingImageUrl}
+                        alt="Social sharing"
+                        className="w-full h-48 object-cover rounded-lg border border-gray-600"
                       />
+                      <button
+                        onClick={() => handleInputChange('socialSharingImageUrl', '')}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+                      >
+                        <FiX size={16} />
+                      </button>
                     </div>
-                  </>
-                )}
-              </div>
+                  ) : (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors bg-gray-700"
+                    >
+                      <FiImage className="mx-auto mb-2 text-gray-400" size={32} />
+                      <p className="text-gray-400">
+                        {uploading ? 'Uploading...' : 'Click to upload image'}
+                      </p>
+                    </div>
+                  )}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                      Social Sharing Image URL:
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.socialSharingImageUrl}
+                      onChange={(e) => handleInputChange('socialSharingImageUrl', e.target.value)}
+                      placeholder="https://pixabay.com/illustrations/background-texture-abstract"
+                      className="w-full px-3 py-2 text-sm bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </>
+              )}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* CODE INJECTION TAB */}
-          {activeTab === 'code' && (
-            <div className="space-y-6">
-              {/* Inside <head> code */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Inside &lt;head&gt; code:
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Paste any valid HTML code here. The code will be inserted to the end of &lt;head&gt; section, right before &lt;/head&gt;
-                </p>
-                <CodeMirror
-                  value={settings.headCode}
-                  height="150px"
-                  extensions={[html()]}
-                  onChange={(value) => handleInputChange('headCode', value)}
-                  className="border border-gray-300 rounded-lg overflow-hidden"
-                />
-              </div>
-
-              {/* End of <body> code */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  End of &lt;body&gt; code:
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Paste any valid HTML code here. The code will be inserted to the end of &lt;body&gt; section, right before &lt;/body&gt; tag
-                </p>
-                <CodeMirror
-                  value={settings.bodyEndCode}
-                  height="150px"
-                  extensions={[html()]}
-                  onChange={(value) => handleInputChange('bodyEndCode', value)}
-                  className="border border-gray-300 rounded-lg overflow-hidden"
-                />
-              </div>
-
-              {/* Before <!DOCTYPE> code */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Before &lt;!DOCTYPE&gt;, &lt;html&gt; and &lt;head&gt; tags:
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Paste the code you want to have in the VERY FIRST LINE of your page, before &lt;!DOCTYPE&gt;, &lt;html&gt; and &lt;head&gt; tags. Use for server side scripts (PHP, ASP, etc)
-                </p>
-                <CodeMirror
-                  value={settings.beforeDoctypeCode}
-                  height="150px"
-                  extensions={[javascript()]}
-                  onChange={(value) => handleInputChange('beforeDoctypeCode', value)}
-                  className="border border-gray-300 rounded-lg overflow-hidden"
-                />
-              </div>
+        {/* CODE INJECTION TAB */}
+        {activeTab === 'code' && (
+          <div className="space-y-6">
+            {/* Inside <head> code */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                Inside &lt;head&gt; code:
+              </label>
+              <p className="text-xs text-gray-400 mb-2">
+                Paste any valid HTML code here. The code will be inserted to the end of &lt;head&gt; section, right before &lt;/head&gt;
+              </p>
+              <CodeMirror
+                value={settings.headCode}
+                height="150px"
+                extensions={[html()]}
+                onChange={(value) => handleInputChange('headCode', value)}
+                className="border border-gray-600 rounded-lg overflow-hidden"
+                theme="dark"
+              />
             </div>
-          )}
-        </div>
 
-        {/* Footer with Save Button */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
-          <button
-            onClick={handleSave}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
-          >
-            Salvează Setările
-          </button>
-        </div>
+            {/* End of <body> code */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                End of &lt;body&gt; code:
+              </label>
+              <p className="text-xs text-gray-400 mb-2">
+                Paste any valid HTML code here. The code will be inserted to the end of &lt;body&gt; section, right before &lt;/body&gt; tag
+              </p>
+              <CodeMirror
+                value={settings.bodyEndCode}
+                height="150px"
+                extensions={[html()]}
+                onChange={(value) => handleInputChange('bodyEndCode', value)}
+                className="border border-gray-600 rounded-lg overflow-hidden"
+                theme="dark"
+              />
+            </div>
+
+            {/* Before <!DOCTYPE> code */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                Before &lt;!DOCTYPE&gt;, &lt;html&gt; and &lt;head&gt; tags:
+              </label>
+              <p className="text-xs text-gray-400 mb-2">
+                Paste the code you want to have in the VERY FIRST LINE of your page, before &lt;!DOCTYPE&gt;, &lt;html&gt; and &lt;head&gt; tags. Use for server side scripts (PHP, ASP, etc)
+              </p>
+              <CodeMirror
+                value={settings.beforeDoctypeCode}
+                height="150px"
+                extensions={[javascript()]}
+                onChange={(value) => handleInputChange('beforeDoctypeCode', value)}
+                className="border border-gray-600 rounded-lg overflow-hidden"
+                theme="dark"
+              />
+            </div>
+          </div>
+        )}
       </div>
-    </>
+
+      {/* Footer with Save Button */}
+      <div className="p-4 border-t border-gray-700 bg-gray-900">
+        <button
+          onClick={handleSave}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+        >
+          Salvează Setările
+        </button>
+      </div>
+    </div>
   );
 };
 
