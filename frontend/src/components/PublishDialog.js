@@ -13,6 +13,88 @@ const PublishDialog = () => {
 
   if (!publishDialogOpen) return null;
 
+  const handleExportProject = async () => {
+    try {
+      setIsPublishing(true);
+      
+      // Create project data with all sites
+      const projectData = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        sites: sites,
+        metadata: {
+          appName: 'Mobirise Builder Clone',
+          totalSites: sites.length,
+          totalPages: sites.reduce((sum, site) => sum + site.pages.length, 0)
+        }
+      };
+
+      // Convert to JSON and create blob
+      const jsonString = JSON.stringify(projectData, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `proiect.${currentSite.name.replace(/\s+/g, '_')}.mbp`;
+      document.body.appendChild(a);
+      a.click();
+      
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      setPublishDialogOpen(false);
+    } catch (error) {
+      console.error('Export error:', error);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const handleImportProject = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const projectData = JSON.parse(e.target.result);
+        
+        // Validate project data
+        if (!projectData.sites || !Array.isArray(projectData.sites)) {
+          alert('Fișier de proiect invalid!');
+          return;
+        }
+
+        // Load all sites from project
+        setSites(projectData.sites);
+        
+        // Set current site and page to first ones
+        if (projectData.sites.length > 0) {
+          setCurrentSiteId(projectData.sites[0].id);
+          if (projectData.sites[0].pages.length > 0) {
+            setCurrentPageId(projectData.sites[0].pages[0].id);
+          }
+        }
+
+        setPublishDialogOpen(false);
+        
+        // Success notification
+        console.log('Proiect încărcat cu succes!', projectData.metadata);
+      } catch (error) {
+        console.error('Import error:', error);
+        alert('Eroare la încărcarea proiectului! Asigurați-vă că fișierul este valid.');
+      }
+    };
+    
+    reader.readAsText(file);
+    
+    // Reset input
+    event.target.value = '';
+  };
+
   const handlePublish = async () => {
     setIsPublishing(true);
     
