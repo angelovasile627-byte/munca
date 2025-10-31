@@ -443,11 +443,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Pages Management Panel"
-    - "Sites Management Panel"
-    - "Multi-Site and Multi-Page Context"
-    - "Sidebar Menu Update"
-    - "Header Current Page/Site Display"
+    - "Enhanced Settings Panel with Tabs"
+    - "Code Editor with Syntax Highlighting"
+    - "Social Sharing Image Upload"
+    - "Page Settings Save Functionality"
+    - "Sites CRUD API Endpoints"
+    - "Pages CRUD API Endpoints"
+    - "Image Upload API Endpoint"
+    - "HTML Export API Endpoint"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
