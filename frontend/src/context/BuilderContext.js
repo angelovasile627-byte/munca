@@ -63,25 +63,55 @@ export const BuilderProvider = ({ children }) => {
   const currentSite = sites.find(s => s.id === currentSiteId) || sites[0];
   const currentPage = currentSite?.pages.find(p => p.id === currentPageId) || currentSite?.pages[0];
 
+  // Save to history for undo/redo
+  const saveToHistory = (newSites) => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(JSON.parse(JSON.stringify(newSites)));
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  // Undo/Redo functions
+  const undo = () => {
+    if (historyIndex > 0) {
+      setHistoryIndex(historyIndex - 1);
+      setSites(JSON.parse(JSON.stringify(history[historyIndex - 1])));
+    }
+  };
+
+  const redo = () => {
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex(historyIndex + 1);
+      setSites(JSON.parse(JSON.stringify(history[historyIndex + 1])));
+    }
+  };
+
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < history.length - 1;
+
   // Block operations
   const addBlock = (block) => {
-    setSites(prevSites => prevSites.map(site => {
-      if (site.id === currentSiteId) {
-        return {
-          ...site,
-          pages: site.pages.map(page => {
-            if (page.id === currentPageId) {
-              return {
-                ...page,
-                blocks: [...page.blocks, { ...block, id: Date.now().toString() }]
-              };
-            }
-            return page;
-          })
-        };
-      }
-      return site;
-    }));
+    setSites(prevSites => {
+      const newSites = prevSites.map(site => {
+        if (site.id === currentSiteId) {
+          return {
+            ...site,
+            pages: site.pages.map(page => {
+              if (page.id === currentPageId) {
+                return {
+                  ...page,
+                  blocks: [...page.blocks, { ...block, id: Date.now().toString() }]
+                };
+              }
+              return page;
+            })
+          };
+        }
+        return site;
+      });
+      saveToHistory(newSites);
+      return newSites;
+    });
   };
 
   const removeBlock = (blockId) => {
