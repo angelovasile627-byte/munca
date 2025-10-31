@@ -50,6 +50,13 @@ const PagesPanel = () => {
     setEditPageName(page.name);
   };
 
+  const handleDuplicatePage = (pageId) => {
+    const newPageId = duplicatePage(pageId);
+    if (newPageId) {
+      switchPage(newPageId);
+    }
+  };
+
   return (
     <div className="w-80 bg-gray-800 h-full flex flex-col border-r border-gray-700">
       {/* Header */}
