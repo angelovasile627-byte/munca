@@ -90,6 +90,7 @@ class Site(BaseModel):
     name: str
     status: str = "unpublished"
     pages: List[Page] = []
+    siteStyles: SiteStyles = Field(default_factory=SiteStyles)
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
