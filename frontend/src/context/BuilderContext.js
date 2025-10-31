@@ -253,6 +253,8 @@ export const BuilderProvider = ({ children }) => {
     setBlocksPanelOpen,
     settingsPanelOpen,
     setSettingsPanelOpen,
+    centerPanelView,
+    setCenterPanelView,
     mobilePreview,
     setMobilePreview,
     sites,
