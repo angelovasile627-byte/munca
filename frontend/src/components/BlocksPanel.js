@@ -157,72 +157,100 @@ const BlocksPanel = () => {
   };
 
   // Group blocks by category
-  const categories = [...new Set(blockTemplates.map(t => t.category))];
+  const getBlocksForCategory = (category) => {
+    return blockTemplates.filter(t => t.category === category);
+  };
 
   return (
     <>
       {/* Blocks Panel */}
-      <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transition-transform duration-300 ${
+      <div className={`fixed top-0 right-0 h-full w-[600px] bg-slate-800 shadow-2xl z-50 transition-transform duration-300 flex ${
         blocksPanelOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-slate-700 text-white">
-          <h2 className="text-lg font-bold">Add Block</h2>
-          <button
-            onClick={() => setBlocksPanelOpen(false)}
-            className="p-2 hover:bg-slate-600 rounded transition-colors"
-          >
-            <FiX size={24} />
-          </button>
+        
+        {/* Main Content Area - Blocks Display */}
+        <div className="flex-1 flex flex-col bg-slate-700">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b border-slate-600 bg-slate-800 text-white">
+            <h2 className="text-lg font-bold">Drag Block to Page</h2>
+            <button
+              onClick={() => setBlocksPanelOpen(false)}
+              className="p-2 hover:bg-slate-700 rounded transition-colors"
+            >
+              <FiX size={24} />
+            </button>
+          </div>
+
+          {/* Category Title */}
+          <div className="p-4 border-b border-slate-600">
+            <h3 className="text-white font-semibold text-lg">{selectedCategory}</h3>
+          </div>
+
+          {/* Blocks Grid */}
+          <div className="flex-1 p-4 overflow-y-auto">
+            <div className="grid grid-cols-2 gap-4">
+              {getBlocksForCategory(selectedCategory).map((template, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAddBlock(template)}
+                  className="bg-slate-600 border-2 border-slate-500 hover:border-blue-400 rounded-lg transition-all overflow-hidden group"
+                >
+                  {/* Preview Image */}
+                  <div className="w-full h-32 overflow-hidden bg-slate-800">
+                    <img 
+                      src={template.preview} 
+                      alt={template.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  
+                  {/* Block Name */}
+                  <div className="p-2 text-left bg-slate-600">
+                    <div className="font-medium text-white text-sm">
+                      {template.name}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* More Blocks Placeholder */}
+            {getBlocksForCategory(selectedCategory).length > 0 && (
+              <div className="mt-6 flex items-center justify-center">
+                <div className="text-center p-4 bg-slate-600 rounded-lg">
+                  <div className="text-white text-sm">More {selectedCategory} Blocks</div>
+                  <div className="text-gray-400 text-xs mt-1">Coming soon...</div>
+                </div>
+              </div>
+            )}
+
+            {/* Empty State */}
+            {getBlocksForCategory(selectedCategory).length === 0 && (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center text-gray-400">
+                  <p className="text-lg mb-2">No blocks available</p>
+                  <p className="text-sm">More {selectedCategory} blocks coming soon</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Blocks List by Category */}
-        <div className="p-4 overflow-y-auto h-[calc(100%-64px)]">
+        {/* Right Sidebar - Categories Menu */}
+        <div className="w-40 bg-slate-900 border-l border-slate-700 overflow-y-auto">
           {categories.map((category) => (
-            <div key={category} className="mb-6">
-              {/* Category Title */}
-              <h3 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
-                {category}
-              </h3>
-              
-              {/* Blocks in this category */}
-              <div className="space-y-3">
-                {blockTemplates
-                  .filter(t => t.category === category)
-                  .map((template, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleAddBlock(template)}
-                      className="w-full bg-white border-2 border-gray-200 hover:border-blue-400 rounded-lg transition-all overflow-hidden group"
-                    >
-                      {/* Preview Image */}
-                      <div className="w-full h-24 overflow-hidden bg-gray-100">
-                        <img 
-                          src={template.preview} 
-                          alt={template.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                      
-                      {/* Block Name */}
-                      <div className="p-2 text-left">
-                        <div className="font-medium text-gray-800 text-sm group-hover:text-blue-600">
-                          {template.name}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-              </div>
-            </div>
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`w-full px-4 py-3 text-left text-sm transition-colors border-b border-slate-800 ${
+                selectedCategory === category
+                  ? 'bg-red-600 text-white'
+                  : 'text-gray-300 hover:bg-slate-800 hover:text-white'
+              }`}
+            >
+              {category}
+            </button>
           ))}
-
-          {/* Pro Tip */}
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <h3 className="font-bold text-blue-900 mb-2">💡 Pro Tip</h3>
-            <p className="text-sm text-blue-700">
-              Click on any block to add it to your page. Blocks are organized by category for easy navigation.
-            </p>
-          </div>
         </div>
       </div>
     </>
