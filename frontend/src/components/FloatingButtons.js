@@ -11,7 +11,7 @@ const FloatingButtons = () => {
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 flex flex-col gap-3 z-30 transition-all duration-300 ${blocksPanelOpen ? 'mr-80' : 'mr-0'}`}>
+    <div className={`fixed bottom-6 right-6 flex flex-col gap-3 z-30 transition-all duration-300 ${blocksPanelOpen ? 'mr-[600px]' : 'mr-0'}`}>
       {/* Site Styles Button */}
       <button
         onClick={() => setSiteStylesPanelOpen(true)}
