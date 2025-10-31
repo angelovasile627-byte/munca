@@ -635,6 +635,51 @@ async def publish_site_via_ftp(site_id: str, settings: Dict[str, Any]):
         raise HTTPException(status_code=500, detail=f"FTP publish failed: {str(e)}")
 
 
+# ============= SITE STYLES ENDPOINTS =============
+
+@api_router.get("/sites/{site_id}/styles", response_model=SiteStyles)
+async def get_site_styles(site_id: str):
+    """Get site styles (colors, fonts, options, customCSS)"""
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Return site styles, or default if not present
+    if 'siteStyles' in site:
+        return SiteStyles(**site['siteStyles'])
+    else:
+        return SiteStyles()
+
+
+@api_router.put("/sites/{site_id}/styles", response_model=SiteStyles)
+async def update_site_styles(site_id: str, styles: SiteStyles):
+    """Update site styles"""
+    site = await db.sites.find_one({"id": site_id}, {"_id": 0})
+    
+    if not site:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Convert styles to dict
+    styles_dict = styles.model_dump()
+    
+    # Update site styles
+    result = await db.sites.update_one(
+        {"id": site_id},
+        {
+            "$set": {
+                "siteStyles": styles_dict,
+                "updatedAt": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Site not found")
+    
+    return styles
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
