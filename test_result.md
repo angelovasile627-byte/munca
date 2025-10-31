@@ -399,6 +399,30 @@ frontend:
         agent: "main"
         comment: "Created PreviewModal component that displays current page in full-screen preview mode. Shows all page blocks rendered without edit controls, supports mobile preview width, includes close button. Integrated into Builder.js."
 
+  - task: "Site Styles Panel Implementation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/SiteStylesPanel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented complete Site Styles Panel (similar to Mobirise online). Panel opens via turquoise floating button with link icon. Features: 1) Colors section with primary color picker and 5 buttons/links color pickers using react-colorful. 2) Fonts section with Title1-3, Text, Menu - each with font family dropdown and size input, plus ADD FONT button. 3) Options section with 5 toggle switches (Rounded Corners, Rounded Buttons, Large Buttons, Underlined Links, Animation on Scroll). 4) EDIT IN CODE EDITOR button that opens modal for custom CSS editing. All settings auto-save to backend."
+
+  - task: "Page Settings Button in Header"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Header.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added gear icon (FiSettings) button in Header center section to open Page Settings panel. This provides access to Page Settings (SEO, Code Injection, etc.) since the floating button now opens Site Styles."
+
 backend:
   - task: "Sites CRUD API Endpoints"
     implemented: true
