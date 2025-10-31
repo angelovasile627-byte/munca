@@ -100,122 +100,110 @@ const SettingsPanel = () => {
   };
 
   return (
-    <>
-      {/* Overlay */}
-      {settingsPanelOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40"
-          onClick={() => setSettingsPanelOpen(false)}
-        />
-      )}
-
-      {/* Settings Panel */}
-      <div className={`fixed top-0 right-0 h-full w-[500px] bg-white shadow-2xl z-50 transition-transform duration-300 ${
-        settingsPanelOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-slate-700 text-white">
-          <h2 className="text-lg font-bold">Setări pagină</h2>
-          <div className="flex gap-2">
-            <button
-              onClick={handleExportHTML}
-              className="p-2 hover:bg-slate-600 rounded transition-colors"
-              title="Export HTML"
-            >
-              <FiDownload size={20} />
-            </button>
-            <button
-              onClick={() => setSettingsPanelOpen(false)}
-              className="p-2 hover:bg-slate-600 rounded transition-colors"
-            >
-              <FiX size={24} />
-            </button>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex border-b bg-gray-50">
+    <div className="w-full h-full bg-gray-800 shadow-2xl flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-gray-700 bg-gray-900">
+        <h2 className="text-lg font-bold text-white">Setări pagină</h2>
+        <div className="flex gap-2">
           <button
-            onClick={() => setActiveTab('general')}
-            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'general'
-                ? 'bg-white border-b-2 border-blue-500 text-blue-600'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            onClick={handleExportHTML}
+            className="p-2 hover:bg-gray-700 rounded transition-colors text-white"
+            title="Export HTML"
           >
-            General
+            <FiDownload size={20} />
           </button>
           <button
-            onClick={() => setActiveTab('seo')}
-            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'seo'
-                ? 'bg-white border-b-2 border-blue-500 text-blue-600'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            onClick={() => setSettingsPanelOpen(false)}
+            className="p-2 hover:bg-gray-700 rounded transition-colors text-white"
           >
-            SEO
-          </button>
-          <button
-            onClick={() => setActiveTab('code')}
-            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'code'
-                ? 'bg-white border-b-2 border-blue-500 text-blue-600'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            Code Injection
+            <FiX size={24} />
           </button>
         </div>
+      </div>
 
-        {/* Settings Content */}
-        <div className="p-6 overflow-y-auto h-[calc(100%-120px)]">
-          {/* GENERAL TAB */}
-          {activeTab === 'general' && (
-            <div className="space-y-6">
-              {/* Page Title */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Titlul paginii:
-                </label>
-                <input
-                  type="text"
-                  value={settings.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+      {/* Tabs */}
+      <div className="flex border-b border-gray-700 bg-gray-900">
+        <button
+          onClick={() => setActiveTab('general')}
+          className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+            activeTab === 'general'
+              ? 'bg-gray-800 border-b-2 border-blue-500 text-blue-400'
+              : 'text-gray-400 hover:bg-gray-800'
+          }`}
+        >
+          General
+        </button>
+        <button
+          onClick={() => setActiveTab('seo')}
+          className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+            activeTab === 'seo'
+              ? 'bg-gray-800 border-b-2 border-blue-500 text-blue-400'
+              : 'text-gray-400 hover:bg-gray-800'
+          }`}
+        >
+          SEO
+        </button>
+        <button
+          onClick={() => setActiveTab('code')}
+          className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+            activeTab === 'code'
+              ? 'bg-gray-800 border-b-2 border-blue-500 text-blue-400'
+              : 'text-gray-400 hover:bg-gray-800'
+          }`}
+        >
+          Code Injection
+        </button>
+      </div>
 
-              {/* Page URL */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  URL-ul paginii:
-                </label>
-                <input
-                  type="text"
-                  value={settings.pageUrl}
-                  onChange={(e) => handleInputChange('pageUrl', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  This is the default site page. Don't rename it unless you have another index.html file.
-                </p>
-              </div>
-
-              {/* Page Description */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Descrierea paginii:
-                </label>
-                <textarea
-                  rows={3}
-                  value={settings.pageDescription}
-                  onChange={(e) => handleInputChange('pageDescription', e.target.value)}
-                  placeholder="Enter page description..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+      {/* Settings Content */}
+      <div className="p-6 overflow-y-auto flex-1">
+        {/* GENERAL TAB */}
+        {activeTab === 'general' && (
+          <div className="space-y-6">
+            {/* Page Title */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                Titlul paginii:
+              </label>
+              <input
+                type="text"
+                value={settings.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
-          )}
+
+            {/* Page URL */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                URL-ul paginii:
+              </label>
+              <input
+                type="text"
+                value={settings.pageUrl}
+                onChange={(e) => handleInputChange('pageUrl', e.target.value)}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <p className="text-sm text-gray-400 mt-1">
+                This is the default site page. Don't rename it unless you have another index.html file.
+              </p>
+            </div>
+
+            {/* Page Description */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                Descrierea paginii:
+              </label>
+              <textarea
+                rows={3}
+                value={settings.pageDescription}
+                onChange={(e) => handleInputChange('pageDescription', e.target.value)}
+                placeholder="Enter page description..."
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        )}
 
           {/* SEO TAB */}
           {activeTab === 'seo' && (
