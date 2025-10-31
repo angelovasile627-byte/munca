@@ -315,6 +315,127 @@ frontend:
         agent: "main"
         comment: "Updated Header to display current page name and current site name with publish status. Dynamically updates when switching pages or sites."
 
+  - task: "Enhanced Settings Panel with Tabs"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/SettingsPanel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Completely redesigned SettingsPanel with 3 tabs: General (page title, URL, description), SEO (Google preview, social sharing image upload), Code Injection (head code, body end code, before DOCTYPE code). Added syntax highlighting with CodeMirror for code editors."
+
+  - task: "Code Editor with Syntax Highlighting"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/SettingsPanel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Integrated @uiw/react-codemirror with HTML and JavaScript syntax highlighting for Inside <head> code, End of <body> code, and Before <!DOCTYPE> code fields."
+
+  - task: "Social Sharing Image Upload"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/SettingsPanel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented image upload functionality with toggle enable/disable, image preview, and URL input field. Images are uploaded to backend /api/upload-image endpoint."
+
+  - task: "Page Settings Save Functionality"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/context/BuilderContext.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added updatePageSettings function in BuilderContext to save all page settings (title, URL, description, social sharing, code injection) per page. Each page maintains its own settings."
+
+backend:
+  - task: "Sites CRUD API Endpoints"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented complete REST API for sites management: POST /api/sites (create), GET /api/sites (list all), GET /api/sites/{site_id} (get one), PUT /api/sites/{site_id} (update), DELETE /api/sites/{site_id} (delete)."
+
+  - task: "Pages CRUD API Endpoints"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented complete REST API for pages management within sites: POST /api/sites/{site_id}/pages (create), PUT /api/sites/{site_id}/pages/{page_id} (update with all settings), DELETE /api/sites/{site_id}/pages/{page_id} (delete)."
+
+  - task: "Image Upload API Endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented POST /api/upload-image endpoint for uploading social sharing images. Validates file types (jpg, png, webp), saves to /app/backend/uploads/ directory, and returns public URL."
+
+  - task: "HTML Export API Endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented GET /api/sites/{site_id}/pages/{page_id}/export endpoint that generates complete HTML file with: before DOCTYPE code, meta tags (SEO + social sharing), inside <head> code, page blocks, end of <body> code. Returns downloadable HTML file."
+
+  - task: "MongoDB Page Schema Extension"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Extended Page model with new fields: pageUrl, pageDescription, socialSharingEnabled, socialSharingImageUrl, headCode, bodyEndCode, beforeDoctypeCode. All data persisted in MongoDB."
+
+  - task: "Static File Serving for Uploads"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Configured FastAPI to serve uploaded images from /uploads directory using StaticFiles middleware."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
