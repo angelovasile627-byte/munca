@@ -8,6 +8,7 @@ import BlocksPanel from '../components/BlocksPanel';
 import FloatingButtons from '../components/FloatingButtons';
 import SettingsPanel from '../components/SettingsPanel';
 import PublishDialog from '../components/PublishDialog';
+import PreviewModal from '../components/PreviewModal';
 import { Home, Globe } from 'lucide-react';
 
 const BuilderContent = () => {
