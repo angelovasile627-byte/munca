@@ -266,6 +266,7 @@ export const BuilderProvider = ({ children }) => {
     addPage,
     removePage,
     updatePage,
+    updatePageSettings,
     switchPage,
     addSite,
     removeSite,
