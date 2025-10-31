@@ -388,7 +388,6 @@ const Sidebar = () => {
         {currentView === 'main' && renderMainMenu()}
         {currentView === 'pages' && renderPagesView()}
         {currentView === 'sites' && renderSitesView()}
-        {currentView === 'page-settings' && renderPageSettingsView()}
       </div>
     </>
   );
