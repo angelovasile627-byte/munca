@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useBuilder } from '../context/BuilderContext';
-import { X, Plus, Edit2, Trash2, Check, Settings } from 'lucide-react';
+import { X, Plus, Edit2, Trash2, Check, Settings, Copy } from 'lucide-react';
 
 const PagesPanel = () => {
   const { 
@@ -10,6 +10,7 @@ const PagesPanel = () => {
     removePage,
     updatePage,
     switchPage,
+    duplicatePage,
     setSettingsPanelOpen
   } = useBuilder();
 
