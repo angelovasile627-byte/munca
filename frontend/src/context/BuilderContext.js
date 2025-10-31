@@ -11,7 +11,6 @@ export const useBuilder = () => {
 };
 
 export const BuilderProvider = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true); // Always open in new layout
   const [blocksPanelOpen, setBlocksPanelOpen] = useState(false);
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
