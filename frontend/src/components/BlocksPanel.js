@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
