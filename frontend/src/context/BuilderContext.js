@@ -115,23 +115,27 @@ export const BuilderProvider = ({ children }) => {
   };
 
   const removeBlock = (blockId) => {
-    setSites(prevSites => prevSites.map(site => {
-      if (site.id === currentSiteId) {
-        return {
-          ...site,
-          pages: site.pages.map(page => {
-            if (page.id === currentPageId) {
-              return {
-                ...page,
-                blocks: page.blocks.filter(b => b.id !== blockId)
-              };
-            }
-            return page;
-          })
-        };
-      }
-      return site;
-    }));
+    setSites(prevSites => {
+      const newSites = prevSites.map(site => {
+        if (site.id === currentSiteId) {
+          return {
+            ...site,
+            pages: site.pages.map(page => {
+              if (page.id === currentPageId) {
+                return {
+                  ...page,
+                  blocks: page.blocks.filter(b => b.id !== blockId)
+                };
+              }
+              return page;
+            })
+          };
+        }
+        return site;
+      });
+      saveToHistory(newSites);
+      return newSites;
+    });
   };
 
   const updateBlock = (blockId, updates) => {
