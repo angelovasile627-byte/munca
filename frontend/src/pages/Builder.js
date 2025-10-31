@@ -10,6 +10,7 @@ import SettingsPanel from '../components/SettingsPanel';
 import SiteStylesPanel from '../components/SiteStylesPanel';
 import PublishDialog from '../components/PublishDialog';
 import PreviewModal from '../components/PreviewModal';
+import DynamicStyles from '../components/DynamicStyles';
 import { Home, Globe } from 'lucide-react';
 
 const BuilderContent = () => {
