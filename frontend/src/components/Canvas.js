@@ -9,7 +9,8 @@ const Canvas = () => {
     mobilePreview, 
     reorderBlocks, 
     removeBlock,
-    setBlocksPanelOpen 
+    setBlocksPanelOpen,
+    blocksPanelOpen
   } = useBuilder();
 
   const handleDragEnd = (result) => {
@@ -17,10 +18,21 @@ const Canvas = () => {
     reorderBlocks(result.source.index, result.destination.index);
   };
 
+  // Handler pentru click în canvas - închide BlocksPanel
+  const handleCanvasClick = (e) => {
+    // Verifică dacă click-ul este în canvas, nu pe butoane de control
+    if (blocksPanelOpen && e.target.closest('.canvas-container')) {
+      setBlocksPanelOpen(false);
+    }
+  };
+
   const canvasWidth = mobilePreview ? 'max-w-sm' : 'max-w-7xl';
 
   return (
-    <div className="flex-1 bg-gray-100 overflow-auto p-8">
+    <div 
+      className={`flex-1 bg-gray-100 overflow-auto p-8 transition-all duration-300 ${blocksPanelOpen ? 'mr-80' : 'mr-0'}`}
+      onClick={handleCanvasClick}
+    >
       <div className={`mx-auto bg-white shadow-lg min-h-[800px] ${canvasWidth} transition-all duration-300`}>
         {currentPage.blocks.length === 0 ? (
           // Empty State
