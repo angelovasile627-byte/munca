@@ -241,7 +241,10 @@ const Sidebar = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handlePageSettingsClick(page);
+                  // Switch to this page first, then open settings panel
+                  switchPage(page.id);
+                  setSettingsPanelOpen(true);
+                  setSidebarOpen(false);
                 }}
                 className="p-2 hover:bg-slate-600 rounded transition-colors"
                 title="Setări pagină"
