@@ -47,9 +47,11 @@ const PublishDialog = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
       
+      showSuccess(`Proiect salvat: ${a.download}`);
       setPublishDialogOpen(false);
     } catch (error) {
       console.error('Export error:', error);
+      showError('Eroare la salvarea proiectului!');
     } finally {
       setIsPublishing(false);
     }
@@ -66,7 +68,7 @@ const PublishDialog = () => {
         
         // Validate project data
         if (!projectData.sites || !Array.isArray(projectData.sites)) {
-          alert('Fișier de proiect invalid!');
+          showError('Fișier de proiect invalid!');
           return;
         }
 
@@ -82,12 +84,10 @@ const PublishDialog = () => {
         }
 
         setPublishDialogOpen(false);
-        
-        // Success notification
-        console.log('Proiect încărcat cu succes!', projectData.metadata);
+        showSuccess(`Proiect încărcat: ${projectData.metadata.totalSites} site-uri, ${projectData.metadata.totalPages} pagini`);
       } catch (error) {
         console.error('Import error:', error);
-        alert('Eroare la încărcarea proiectului! Asigurați-vă că fișierul este valid.');
+        showError('Eroare la încărcarea proiectului!');
       }
     };
     
