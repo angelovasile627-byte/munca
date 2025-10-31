@@ -366,6 +366,50 @@ export const BuilderProvider = ({ children }) => {
     }
   };
 
+  // Site Styles operations
+  const updateSiteStyles = async (newStyles) => {
+    setSiteStyles(newStyles);
+    
+    // Save to backend
+    try {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      const response = await fetch(`${backendUrl}/api/sites/${currentSiteId}/styles`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newStyles),
+      });
+      
+      if (!response.ok) {
+        console.error('Failed to save site styles to backend');
+      }
+    } catch (error) {
+      console.error('Error saving site styles:', error);
+    }
+  };
+
+  // Load site styles from backend when switching sites
+  useEffect(() => {
+    const loadSiteStyles = async () => {
+      try {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+        const response = await fetch(`${backendUrl}/api/sites/${currentSiteId}/styles`);
+        
+        if (response.ok) {
+          const styles = await response.json();
+          setSiteStyles(styles);
+        }
+      } catch (error) {
+        console.error('Error loading site styles:', error);
+      }
+    };
+
+    if (currentSiteId) {
+      loadSiteStyles();
+    }
+  }, [currentSiteId]);
+
   const value = {
     blocksPanelOpen,
     setBlocksPanelOpen,
