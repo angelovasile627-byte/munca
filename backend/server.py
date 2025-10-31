@@ -529,22 +529,27 @@ async def export_site_as_zip(site_id: str):
         # Export each page as HTML
         for page in site.get('pages', []):
             html_content = generate_html_export(page, site['name'])
-            page_filename = f"{page.get('pageUrl', f'{page[\"name\"]}.html')}"
+            page_name = page.get('name', 'page')
+            page_filename = page.get('pageUrl', f"{page_name}.html")
             zip_file.writestr(page_filename, html_content)
         
         # Add a README file
-        readme_content = f"""# {site['name']}
+        site_name = site['name']
+        pages_list = '\n'.join([f"- {page['name']}: {page.get('pageUrl', page['name'] + '.html')}" for page in site.get('pages', [])])
+        generated_time = datetime.now(timezone.utc).isoformat()
+        
+        readme_content = f"""# {site_name}
 
 This site was exported from Mobirise Builder Clone.
 
 Pages included:
-{chr(10).join([f"- {page['name']}: {page.get('pageUrl', page['name'] + '.html')}" for page in site.get('pages', [])])}
+{pages_list}
 
 To use this site:
 1. Extract all files to your web server
 2. Open index.html in your browser
 
-Generated on: {datetime.now(timezone.utc).isoformat()}
+Generated on: {generated_time}
 """
         zip_file.writestr("README.txt", readme_content)
     
