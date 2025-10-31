@@ -38,6 +38,68 @@ api_router = APIRouter(prefix="/api")
 
 
 # Define Models
+class Block(BaseModel):
+    id: str
+    type: str
+    content: Optional[str] = ""
+
+class PageSettings(BaseModel):
+    """Page settings including SEO and code injection"""
+    pageUrl: str = "index.html"
+    pageDescription: str = ""
+    socialSharingEnabled: bool = True
+    socialSharingImageUrl: str = ""
+    headCode: str = ""
+    bodyEndCode: str = ""
+    beforeDoctypeCode: str = ""
+
+class Page(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    blocks: List[Block] = []
+    # Page settings
+    pageUrl: str = "index.html"
+    pageDescription: str = ""
+    socialSharingEnabled: bool = True
+    socialSharingImageUrl: str = ""
+    headCode: str = ""
+    bodyEndCode: str = ""
+    beforeDoctypeCode: str = ""
+
+class PageCreate(BaseModel):
+    name: str
+    pageUrl: Optional[str] = "page.html"
+
+class PageUpdate(BaseModel):
+    name: Optional[str] = None
+    blocks: Optional[List[Block]] = None
+    pageUrl: Optional[str] = None
+    pageDescription: Optional[str] = None
+    socialSharingEnabled: Optional[bool] = None
+    socialSharingImageUrl: Optional[str] = None
+    headCode: Optional[str] = None
+    bodyEndCode: Optional[str] = None
+    beforeDoctypeCode: Optional[str] = None
+
+class Site(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    status: str = "unpublished"
+    pages: List[Page] = []
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class SiteCreate(BaseModel):
+    name: str
+
+class SiteUpdate(BaseModel):
+    name: Optional[str] = None
+    status: Optional[str] = None
+
 class StatusCheck(BaseModel):
     model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
     
