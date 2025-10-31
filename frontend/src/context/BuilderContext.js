@@ -214,22 +214,32 @@ export const BuilderProvider = ({ children }) => {
   };
 
   const removePage = (pageId) => {
-    setSites(prevSites => prevSites.map(site => {
-      if (site.id === currentSiteId) {
-        const updatedPages = site.pages.filter(p => p.id !== pageId);
-        return {
-          ...site,
-          pages: updatedPages
-        };
-      }
-      return site;
-    }));
-    // Switch to first page if current page is deleted
-    if (pageId === currentPageId && currentSite.pages.length > 1) {
-      const remainingPages = currentSite.pages.filter(p => p.id !== pageId);
-      if (remainingPages.length > 0) {
-        setCurrentPageId(remainingPages[0].id);
-      }
+    let newPageId = null;
+    
+    setSites(prevSites => {
+      const newSites = prevSites.map(site => {
+        if (site.id === currentSiteId) {
+          const updatedPages = site.pages.filter(p => p.id !== pageId);
+          
+          // Determine the page to switch to if we're deleting the current page
+          if (pageId === currentPageId && updatedPages.length > 0) {
+            newPageId = updatedPages[0].id;
+          }
+          
+          return {
+            ...site,
+            pages: updatedPages
+          };
+        }
+        return site;
+      });
+      
+      return newSites;
+    });
+    
+    // Switch to the new page if needed
+    if (newPageId) {
+      setCurrentPageId(newPageId);
     }
   };
 
