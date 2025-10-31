@@ -182,6 +182,46 @@ const PublishDialog = () => {
           <div className="space-y-4">
             {/* Publishing Methods */}
             <div className="space-y-3">
+              {/* Save Project Option */}
+              <label className="flex items-center gap-3 p-4 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors border-2 border-blue-500">
+                <input
+                  type="radio"
+                  name="publishMethod"
+                  value="project"
+                  checked={publishMethod === 'project'}
+                  onChange={(e) => setPublishMethod(e.target.value)}
+                  className="w-5 h-5"
+                />
+                <FiSave size={24} className="text-blue-400" />
+                <div className="flex-1">
+                  <div className="font-medium">💾 Salvează Proiect Complet</div>
+                  <div className="text-sm text-gray-400">
+                    Salvează toate site-urile, paginile, blocurile și setările într-un fișier .mbp
+                  </div>
+                </div>
+              </label>
+
+              {/* Load Project Option */}
+              <div 
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center gap-3 p-4 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors border-2 border-green-500"
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".mbp,.json"
+                  onChange={handleImportProject}
+                  className="hidden"
+                />
+                <FiFolderPlus size={24} className="text-green-400" />
+                <div className="flex-1">
+                  <div className="font-medium">📂 Încarcă Proiect</div>
+                  <div className="text-sm text-gray-400">
+                    Deschide un proiect salvat anterior (fișier .mbp)
+                  </div>
+                </div>
+              </div>
+
               {/* Local Folder Option */}
               <label className="flex items-center gap-3 p-4 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors">
                 <input
@@ -192,11 +232,11 @@ const PublishDialog = () => {
                   onChange={(e) => setPublishMethod(e.target.value)}
                   className="w-5 h-5"
                 />
-                <FiDownload size={24} className="text-blue-400" />
+                <FiDownload size={24} className="text-purple-400" />
                 <div className="flex-1">
-                  <div className="font-medium">Dosar local în calculator</div>
+                  <div className="font-medium">Export HTML (ZIP)</div>
                   <div className="text-sm text-gray-400">
-                    Descarcă site-ul ca fișier ZIP
+                    Descarcă doar site-ul curent ca fișier ZIP HTML
                   </div>
                 </div>
               </label>
