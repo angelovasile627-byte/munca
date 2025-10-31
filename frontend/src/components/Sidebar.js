@@ -16,7 +16,8 @@ const Sidebar = () => {
     addSite,
     removeSite,
     updateSite,
-    switchSite
+    switchSite,
+    setSettingsPanelOpen
   } = useBuilder();
 
   const [currentView, setCurrentView] = useState('main'); // 'main', 'pages', 'sites', 'page-settings'
