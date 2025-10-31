@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiMenu, FiSmartphone, FiUploadCloud } from 'react-icons/fi';
+import { FiMenu, FiSmartphone, FiUploadCloud, FiRotateCcw, FiRotateCw, FiEye } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
 const Header = () => {
@@ -9,7 +9,13 @@ const Header = () => {
     currentSite, 
     currentPage,
     mobilePreview, 
-    setMobilePreview 
+    setMobilePreview,
+    setPublishDialogOpen,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    setPreviewMode
   } = useBuilder();
 
   return (
@@ -19,6 +25,7 @@ const Header = () => {
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 hover:bg-slate-600 rounded transition-colors"
+          aria-label="Toggle Menu"
         >
           <FiMenu size={20} />
         </button>
@@ -37,19 +44,61 @@ const Header = () => {
       </div>
 
       {/* Center Section */}
-      <button
-        onClick={() => setMobilePreview(!mobilePreview)}
-        className={`p-2 rounded transition-colors ${
-          mobilePreview ? 'bg-slate-600' : 'hover:bg-slate-600'
-        }`}
-        title="Mobile Preview"
-      >
-        <FiSmartphone size={20} />
-      </button>
+      <div className="flex items-center gap-2">
+        {/* Undo/Redo Buttons */}
+        <button
+          onClick={undo}
+          disabled={!canUndo}
+          className={`p-2 rounded transition-colors ${
+            canUndo ? 'hover:bg-slate-600' : 'opacity-40 cursor-not-allowed'
+          }`}
+          title="Undo"
+          aria-label="Undo"
+        >
+          <FiRotateCcw size={20} />
+        </button>
+        <button
+          onClick={redo}
+          disabled={!canRedo}
+          className={`p-2 rounded transition-colors ${
+            canRedo ? 'hover:bg-slate-600' : 'opacity-40 cursor-not-allowed'
+          }`}
+          title="Redo"
+          aria-label="Redo"
+        >
+          <FiRotateCw size={20} />
+        </button>
+
+        {/* Mobile Preview */}
+        <button
+          onClick={() => setMobilePreview(!mobilePreview)}
+          className={`p-2 rounded transition-colors ${
+            mobilePreview ? 'bg-slate-600' : 'hover:bg-slate-600'
+          }`}
+          title="Mobile Preview"
+          aria-label="Mobile Preview"
+        >
+          <FiSmartphone size={20} />
+        </button>
+      </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-3">
-        <button className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded transition-colors">
+        {/* Preview Button */}
+        <button 
+          onClick={() => setPreviewMode(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded transition-colors"
+          title="Preview Site"
+        >
+          <FiEye size={18} />
+          <span className="font-medium">Preview</span>
+        </button>
+
+        {/* Publish Button */}
+        <button 
+          onClick={() => setPublishDialogOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded transition-colors"
+        >
           <FiUploadCloud size={18} />
           <span className="font-medium">Publish</span>
         </button>
