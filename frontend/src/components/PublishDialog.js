@@ -287,10 +287,21 @@ const PublishDialog = () => {
               </div>
             )}
 
-            {/* Help Text for Export */}
+            {/* Help Text */}
+            {publishMethod === 'project' && (
+              <div className="text-sm text-gray-300 bg-blue-900 bg-opacity-30 p-4 rounded-lg border border-blue-600">
+                <p className="font-semibold mb-2">📌 Cum funcționează:</p>
+                <ul className="list-disc list-inside space-y-1 text-gray-400">
+                  <li>Se salvează fișierul cu format: <code className="text-blue-300">proiect.numele_site.mbp</code></li>
+                  <li>Conține toate site-urile, paginile, blocurile și setările</li>
+                  <li>Pentru a încărca: apasă "Încarcă Proiect" și selectează fișierul .mbp</li>
+                  <li>Proiectul va fi restaurat exact cum l-ai salvat, chiar și după ani</li>
+                </ul>
+              </div>
+            )}
             {publishMethod === 'local' && (
               <div className="text-sm text-gray-400 bg-slate-700 p-4 rounded-lg">
-                Pt a exporta proiectul site-ului, te rog utilizează "Site-uri → Setări Site"
+                Exportă doar HTML-ul site-ului curent, fără setările de proiect.
               </div>
             )}
           </div>
