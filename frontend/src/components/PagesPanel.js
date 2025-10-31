@@ -36,12 +36,17 @@ const PagesPanel = () => {
   };
 
   const handleDeletePage = (pageId) => {
+    console.log('Delete button clicked for page:', pageId);
+    console.log('Current site pages:', currentSite.pages);
+    console.log('Pages length:', currentSite.pages.length);
+    
     if (currentSite.pages.length > 1) {
-      if (window.confirm('Are you sure you want to delete this page?')) {
+      if (window.confirm('Sigur doriți să ștergeți această pagină?')) {
+        console.log('User confirmed deletion, calling removePage');
         removePage(pageId);
       }
     } else {
-      alert('Cannot delete the last page!');
+      alert('Nu puteți șterge ultima pagină!');
     }
   };
 
