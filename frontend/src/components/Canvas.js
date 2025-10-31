@@ -110,6 +110,56 @@ const Canvas = () => {
 // Block Renderer Component
 const BlockRenderer = ({ block }) => {
   switch (block.type) {
+    case 'menu':
+      // Render menu block based on style
+      const getMenuStyle = () => {
+        switch (block.content.style) {
+          case 'dark':
+            return 'bg-slate-800 text-white';
+          case 'light':
+            return 'bg-white text-gray-800 border-b border-gray-200';
+          case 'gradient':
+            return 'bg-gradient-to-r from-blue-600 to-purple-600 text-white';
+          case 'minimal':
+            return 'bg-gray-50 text-gray-800 border-b-2 border-gray-300';
+          default:
+            return 'bg-slate-800 text-white';
+        }
+      };
+
+      return (
+        <div className={`canvas-block ${getMenuStyle()} px-8 py-4`}>
+          <div className="flex items-center justify-between max-w-7xl mx-auto">
+            {/* Logo */}
+            <div className="font-bold text-xl">
+              {block.content.logo || 'LOGO'}
+            </div>
+
+            {/* Navigation Links */}
+            <div className="flex items-center gap-8">
+              {block.content.links?.map((link, index) => (
+                <a 
+                  key={index} 
+                  href={link.href} 
+                  className="hover:opacity-80 transition-opacity"
+                >
+                  {link.text}
+                </a>
+              ))}
+            </div>
+
+            {/* CTA Button */}
+            <button className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+              block.content.style === 'light' || block.content.style === 'minimal'
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-white text-blue-600 hover:bg-gray-100'
+            }`}>
+              {block.content.buttonText || 'Get Started'}
+            </button>
+          </div>
+        </div>
+      );
+
     case 'header':
       return (
         <div className="canvas-block bg-gradient-to-r from-blue-600 to-purple-600 text-white p-20 text-center">
