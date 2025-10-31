@@ -59,14 +59,7 @@ const BlocksPanel = () => {
 
   return (
     <>
-      {/* Overlay */}
-      {blocksPanelOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40"
-          onClick={() => setBlocksPanelOpen(false)}
-        />
-      )}
-
+      {/* Overlay - Removed to allow clicking on canvas */}
       {/* Blocks Panel */}
       <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transition-transform duration-300 ${
         blocksPanelOpen ? 'translate-x-0' : 'translate-x-full'
