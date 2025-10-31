@@ -30,7 +30,7 @@ const Canvas = () => {
 
   return (
     <div 
-      className={`flex-1 bg-gray-100 overflow-auto p-8 transition-all duration-300 ${blocksPanelOpen ? 'mr-80' : 'mr-0'}`}
+      className={`flex-1 bg-gray-100 overflow-auto p-8 transition-all duration-300 ${blocksPanelOpen ? 'mr-[600px]' : 'mr-0'}`}
       onClick={handleCanvasClick}
     >
       <div className={`mx-auto bg-white shadow-lg min-h-[800px] ${canvasWidth} transition-all duration-300 canvas-container`}>
