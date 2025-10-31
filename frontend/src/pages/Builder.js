@@ -18,6 +18,9 @@ const BuilderContent = () => {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-gray-900">
+      {/* Dynamic Styles - Apply site styles to canvas */}
+      <DynamicStyles />
+      
       <Header />
       <div className="flex-1 flex mt-14 overflow-hidden">
         {/* Left Sidebar - Always visible */}
