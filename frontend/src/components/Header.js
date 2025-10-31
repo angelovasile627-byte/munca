@@ -61,6 +61,16 @@ const Header = () => {
           <FiRotateCw size={20} />
         </button>
 
+        {/* Page Settings Button */}
+        <button
+          onClick={() => setSettingsPanelOpen(true)}
+          className="p-2 rounded hover:bg-slate-600 transition-colors"
+          title="Page Settings"
+          aria-label="Page Settings"
+        >
+          <FiSettings size={20} />
+        </button>
+
         {/* Mobile Preview */}
         <button
           onClick={() => setMobilePreview(!mobilePreview)}
