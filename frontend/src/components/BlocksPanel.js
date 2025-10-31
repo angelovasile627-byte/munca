@@ -133,9 +133,11 @@ const BlocksPanel = () => {
     // setBlocksPanelOpen(false);
   };
 
+  // Group blocks by category
+  const categories = [...new Set(blockTemplates.map(t => t.category))];
+
   return (
     <>
-      {/* Overlay - Removed to allow clicking on canvas */}
       {/* Blocks Panel */}
       <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transition-transform duration-300 ${
         blocksPanelOpen ? 'translate-x-0' : 'translate-x-full'
@@ -151,35 +153,51 @@ const BlocksPanel = () => {
           </button>
         </div>
 
-        {/* Blocks List */}
+        {/* Blocks List by Category */}
         <div className="p-4 overflow-y-auto h-[calc(100%-64px)]">
-          <div className="space-y-3">
-            {blockTemplates.map((template, index) => (
-              <button
-                key={index}
-                onClick={() => handleAddBlock(template)}
-                className="w-full p-4 bg-gray-50 hover:bg-blue-50 border-2 border-gray-200 hover:border-blue-400 rounded-lg transition-all text-left group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">{template.icon}</div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-800 group-hover:text-blue-600">
-                      {template.name}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      Click to add
-                    </div>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+          {categories.map((category) => (
+            <div key={category} className="mb-6">
+              {/* Category Title */}
+              <h3 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
+                {category}
+              </h3>
+              
+              {/* Blocks in this category */}
+              <div className="space-y-3">
+                {blockTemplates
+                  .filter(t => t.category === category)
+                  .map((template, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleAddBlock(template)}
+                      className="w-full bg-white border-2 border-gray-200 hover:border-blue-400 rounded-lg transition-all overflow-hidden group"
+                    >
+                      {/* Preview Image */}
+                      <div className="w-full h-24 overflow-hidden bg-gray-100">
+                        <img 
+                          src={template.preview} 
+                          alt={template.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      
+                      {/* Block Name */}
+                      <div className="p-2 text-left">
+                        <div className="font-medium text-gray-800 text-sm group-hover:text-blue-600">
+                          {template.name}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          ))}
 
-          {/* Category Info */}
+          {/* Pro Tip */}
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
             <h3 className="font-bold text-blue-900 mb-2">💡 Pro Tip</h3>
             <p className="text-sm text-blue-700">
-              Drag blocks to reorder them on the canvas. Click the edit button to customize each block.
+              Click on any block to add it to your page. Blocks are organized by category for easy navigation.
             </p>
           </div>
         </div>
