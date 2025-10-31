@@ -4,6 +4,29 @@ import { useBuilder } from '../context/BuilderContext';
 
 const BlocksPanel = () => {
   const { blocksPanelOpen, setBlocksPanelOpen, addBlock } = useBuilder();
+  const [selectedCategory, setSelectedCategory] = useState('Menu');
+
+  // Definește toate categoriile disponibile
+  const categories = [
+    'Menu',
+    'Header', 
+    'Features',
+    'Article',
+    'Image & Video',
+    'Gallery & Slider',
+    'People',
+    'Contact',
+    'Social',
+    'Footer',
+    'Form',
+    'List',
+    'Numbers',
+    'Pricing',
+    'News',
+    'Chat',
+    'HTML',
+    'Extensions'
+  ];
 
   const blockTemplates = [
     // Menu Blocks
