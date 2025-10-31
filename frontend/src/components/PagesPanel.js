@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useBuilder } from '../context/BuilderContext';
 import { X, Plus, Edit2, Trash2, Check, Settings, Copy } from 'lucide-react';
+import ConfirmDialog from './ConfirmDialog';
 
 const PagesPanel = () => {
   const { 
@@ -18,6 +19,8 @@ const PagesPanel = () => {
   const [newPageName, setNewPageName] = useState('');
   const [editingPageId, setEditingPageId] = useState(null);
   const [editPageName, setEditPageName] = useState('');
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pageToDelete, setPageToDelete] = useState(null);
 
   const handleAddPage = () => {
     if (newPageName.trim()) {
