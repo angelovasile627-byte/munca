@@ -3,7 +3,12 @@ import { FiPlus, FiLink } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
 const FloatingButtons = () => {
-  const { setBlocksPanelOpen, setSiteStylesPanelOpen } = useBuilder();
+  const { setBlocksPanelOpen, setSiteStylesPanelOpen, siteStylesPanelOpen, settingsPanelOpen } = useBuilder();
+
+  // Hide floating buttons when Site Styles or Settings panel is open
+  if (siteStylesPanelOpen || settingsPanelOpen) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-30">
