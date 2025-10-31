@@ -55,8 +55,8 @@ const Canvas = () => {
                             snapshot.isDragging ? 'shadow-2xl' : ''
                           }`}
                         >
-                          {/* Drag Handle & Actions */}
-                          <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                          {/* Drag Handle - Top Right */}
+                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                             <button
                               {...provided.dragHandleProps}
                               className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -64,12 +64,17 @@ const Canvas = () => {
                             >
                               <FiEdit2 size={16} />
                             </button>
+                          </div>
+
+                          {/* Delete Button - Bottom Right (Large and Visible) */}
+                          <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                             <button
                               onClick={() => removeBlock(block.id)}
-                              className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                              className="w-12 h-12 bg-red-500 text-white rounded-full hover:bg-red-600 flex items-center justify-center shadow-lg"
                               title="Delete block"
+                              aria-label="Delete block"
                             >
-                              <FiTrash2 size={16} />
+                              <FiTrash2 size={20} />
                             </button>
                           </div>
 
