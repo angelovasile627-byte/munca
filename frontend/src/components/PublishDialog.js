@@ -316,14 +316,14 @@ const PublishDialog = () => {
             </button>
             <button
               onClick={handlePublish}
-              disabled={isPublishing}
+              disabled={isPublishing || publishMethod === 'project'}
               className={`px-6 py-2 rounded transition-colors ${
-                isPublishing
+                isPublishing || publishMethod === 'project'
                   ? 'bg-indigo-400 cursor-not-allowed'
                   : 'bg-indigo-600 hover:bg-indigo-700'
               }`}
             >
-              {isPublishing ? 'SE PUBLICĂ...' : 'PUBLICARE'}
+              {isPublishing ? 'SE PUBLICĂ...' : publishMethod === 'project' ? 'SALVEAZĂ PROIECT' : 'PUBLICARE'}
             </button>
           </div>
         </div>
