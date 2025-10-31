@@ -132,7 +132,15 @@ export const BuilderProvider = ({ children }) => {
     const newPage = {
       id: Date.now().toString(),
       name: pageName,
-      blocks: []
+      blocks: [],
+      // Page settings
+      pageUrl: `${pageName.toLowerCase().replace(/\s+/g, '-')}.html`,
+      pageDescription: '',
+      socialSharingEnabled: true,
+      socialSharingImageUrl: '',
+      headCode: '',
+      bodyEndCode: '',
+      beforeDoctypeCode: ''
     };
     setSites(prevSites => prevSites.map(site => {
       if (site.id === currentSiteId) {
