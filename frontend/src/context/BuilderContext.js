@@ -186,6 +186,11 @@ export const BuilderProvider = ({ children }) => {
     }));
   };
 
+  // Update current page settings
+  const updatePageSettings = (settings) => {
+    updatePage(currentPageId, settings);
+  };
+
   const switchPage = (pageId) => {
     setCurrentPageId(pageId);
   };
