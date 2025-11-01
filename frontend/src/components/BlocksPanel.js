@@ -656,10 +656,10 @@ const BlocksPanel = () => {
           <div ref={scrollContainerRef} className="flex-1 p-4 overflow-y-auto">
             <div className="grid grid-cols-2 gap-4">
               {visibleBlocks.map((template, index) => (
-                <button
+                <div
                   key={index}
                   onClick={() => handleAddBlock(template)}
-                  className="bg-slate-600 border-2 border-slate-500 hover:border-blue-400 rounded-lg transition-all overflow-hidden group"
+                  className="bg-slate-600 border-2 border-slate-500 hover:border-blue-400 rounded-lg transition-all overflow-hidden group cursor-pointer"
                 >
                   {/* Preview Image/SVG */}
                   <div className="w-full h-auto overflow-hidden bg-slate-800 flex items-center justify-center p-2">
