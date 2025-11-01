@@ -132,6 +132,14 @@ const PublishDialog = () => {
           alert('Failed to export site');
         }
       } else if (publishMethod === 'ftp') {
+        // Validate FTP settings
+        if (!ftpSettings.host || !ftpSettings.username || !ftpSettings.password) {
+          showError('Te rog configurează setările FTP în FTP Manager mai întâi!');
+          setFtpManagerOpen(true);
+          setIsPublishing(false);
+          return;
+        }
+
         // Upload via FTP
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
         const response = await fetch(
@@ -142,6 +150,7 @@ const PublishDialog = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+              ftpSettings: ftpSettings,
               onlyChanges: publishOnlyChanges,
             }),
           }
@@ -149,11 +158,11 @@ const PublishDialog = () => {
 
         if (response.ok) {
           const data = await response.json();
-          alert(`Site published successfully via FTP!\n${data.message || ''}`);
+          showSuccess(`Site publicat cu succes pe FTP!\n✅ ${data.total_files} fișiere urcate\n📁 Server: ${data.host}\n📂 Folder: ${data.folder}`);
           setPublishDialogOpen(false);
         } else {
           const error = await response.json();
-          alert(`Failed to publish via FTP: ${error.detail || 'Unknown error'}`);
+          showError(`Eroare FTP: ${error.detail || 'Eroare necunoscută'}`);
         }
       }
     } catch (error) {
