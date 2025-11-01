@@ -8,13 +8,14 @@ import BlocksPanel from '../components/BlocksPanel';
 import FloatingButtons from '../components/FloatingButtons';
 import SettingsPanel from '../components/SettingsPanel';
 import SiteStylesPanel from '../components/SiteStylesPanel';
+import BlockSettingsPanel from '../components/BlockSettingsPanel';
 import PublishDialog from '../components/PublishDialog';
 import PreviewModal from '../components/PreviewModal';
 import DynamicStyles from '../components/DynamicStyles';
 import { Home, Globe } from 'lucide-react';
 
 const BuilderContent = () => {
-  const { centerPanelView, setCenterPanelView, settingsPanelOpen, setSettingsPanelOpen, siteStylesPanelOpen } = useBuilder();
+  const { centerPanelView, setCenterPanelView, settingsPanelOpen, setSettingsPanelOpen, siteStylesPanelOpen, blockSettingsPanelOpen } = useBuilder();
 
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-gray-900">
