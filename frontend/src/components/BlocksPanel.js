@@ -1,10 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FiX } from 'react-icons/fi';
 import { useBuilder } from '../context/BuilderContext';
 
 const BlocksPanel = () => {
   const { blocksPanelOpen, setBlocksPanelOpen, addBlock } = useBuilder();
   const [selectedCategory, setSelectedCategory] = useState('Menu');
+  const [visibleCount, setVisibleCount] = useState(6); // Lazy loading: start with 6 blocks
+  const scrollContainerRef = useRef(null);
+
+  // Reset visible count when category changes
+  useEffect(() => {
+    setVisibleCount(6);
+  }, [selectedCategory]);
+
+  // Lazy loading: detect scroll to bottom
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      // Load more when scrolled to 80% of content
+      if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+        setVisibleCount(prev => prev + 6);
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Definește toate categoriile disponibile
   const categories = [
@@ -29,28 +53,28 @@ const BlocksPanel = () => {
   ];
 
   const blockTemplates = [
-    // Menu Blocks
+    // Menu Blocks - 20 variante cu thumbnail-uri reale
     {
       type: 'menu',
       name: 'Menu 1',
       category: 'Menu',
-      preview: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=80&fit=crop',
+      preview: '/assets/thumbnails/menu/menu-1.svg',
       content: {
-        logo: 'MOBIRISE',
+        logo: 'Mobirise',
         links: [
           { text: 'About', href: '#about' },
           { text: 'Services', href: '#services' },
           { text: 'Contacts', href: '#contacts' }
         ],
         buttonText: 'Start Now!',
-        style: 'dark'
+        style: 'light'
       }
     },
     {
       type: 'menu',
       name: 'Menu 2',
       category: 'Menu',
-      preview: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=80&fit=crop',
+      preview: '/assets/thumbnails/menu/menu-2.svg',
       content: {
         logo: 'LOGO',
         links: [
@@ -60,14 +84,14 @@ const BlocksPanel = () => {
           { text: 'Contact', href: '#contact' }
         ],
         buttonText: 'Get Started',
-        style: 'light'
+        style: 'dark'
       }
     },
     {
       type: 'menu',
       name: 'Menu 3',
       category: 'Menu',
-      preview: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=80&fit=crop',
+      preview: '/assets/thumbnails/menu/menu-3.svg',
       content: {
         logo: 'BRAND',
         links: [
@@ -83,7 +107,7 @@ const BlocksPanel = () => {
       type: 'menu',
       name: 'Menu 4',
       category: 'Menu',
-      preview: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=400&h=80&fit=crop',
+      preview: '/assets/thumbnails/menu/menu-4.svg',
       content: {
         logo: 'COMPANY',
         links: [
@@ -91,20 +115,445 @@ const BlocksPanel = () => {
           { text: 'Solutions', href: '#solutions' },
           { text: 'Support', href: '#support' }
         ],
-        buttonText: 'Contact Us',
+        buttonText: 'Contact',
         style: 'minimal'
       }
     },
-    // Header Blocks
+    {
+      type: 'menu',
+      name: 'Menu 5',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-5.svg',
+      content: {
+        logo: 'STUDIO',
+        links: [
+          { text: 'Portfolio', href: '#portfolio' },
+          { text: 'Services', href: '#services' },
+          { text: 'Blog', href: '#blog' }
+        ],
+        buttonText: 'Hire Us',
+        style: 'colored'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 6',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-6.svg',
+      content: {
+        logo: 'AGENCY',
+        links: [
+          { text: 'Work', href: '#work' },
+          { text: 'About', href: '#about' },
+          { text: 'Contact', href: '#contact' }
+        ],
+        buttonText: 'Start Project',
+        style: 'modern'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 7',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-7.svg',
+      content: {
+        logo: 'CREATIVE',
+        links: [
+          { text: 'Services', href: '#services' },
+          { text: 'Portfolio', href: '#portfolio' },
+          { text: 'Team', href: '#team' }
+        ],
+        buttonText: 'Get Quote',
+        style: 'light'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 8',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-8.svg',
+      content: {
+        logo: 'DIGITAL',
+        links: [
+          { text: 'Solutions', href: '#solutions' },
+          { text: 'Cases', href: '#cases' },
+          { text: 'Insights', href: '#insights' }
+        ],
+        buttonText: 'Learn More',
+        style: 'dark'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 9',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-9.svg',
+      content: {
+        logo: 'TECH',
+        links: [
+          { text: 'Products', href: '#products' },
+          { text: 'Features', href: '#features' },
+          { text: 'Pricing', href: '#pricing' }
+        ],
+        buttonText: 'Try Free',
+        style: 'gradient'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 10',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-10.svg',
+      content: {
+        logo: 'START',
+        links: [
+          { text: 'Home', href: '#home' },
+          { text: 'Features', href: '#features' },
+          { text: 'Pricing', href: '#pricing' }
+        ],
+        buttonText: 'Sign Up',
+        style: 'minimal'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 11',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-11.svg',
+      content: {
+        logo: 'BIZZ',
+        links: [
+          { text: 'Services', href: '#services' },
+          { text: 'About', href: '#about' },
+          { text: 'Contact', href: '#contact' }
+        ],
+        buttonText: 'Get Started',
+        style: 'colored'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 12',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-12.svg',
+      content: {
+        logo: 'PRO',
+        links: [
+          { text: 'Features', href: '#features' },
+          { text: 'Docs', href: '#docs' },
+          { text: 'Support', href: '#support' }
+        ],
+        buttonText: 'Download',
+        style: 'modern'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 13',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-13.svg',
+      content: {
+        logo: 'WAVE',
+        links: [
+          { text: 'Solutions', href: '#solutions' },
+          { text: 'Pricing', href: '#pricing' },
+          { text: 'Blog', href: '#blog' }
+        ],
+        buttonText: 'Contact Us',
+        style: 'light'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 14',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-14.svg',
+      content: {
+        logo: 'NEXT',
+        links: [
+          { text: 'Home', href: '#home' },
+          { text: 'About', href: '#about' },
+          { text: 'Services', href: '#services' }
+        ],
+        buttonText: 'Join Now',
+        style: 'dark'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 15',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-15.svg',
+      content: {
+        logo: 'FLEX',
+        links: [
+          { text: 'Products', href: '#products' },
+          { text: 'Pricing', href: '#pricing' },
+          { text: 'FAQ', href: '#faq' }
+        ],
+        buttonText: 'Buy Now',
+        style: 'gradient'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 16',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-16.svg',
+      content: {
+        logo: 'CORE',
+        links: [
+          { text: 'Features', href: '#features' },
+          { text: 'Team', href: '#team' },
+          { text: 'Contact', href: '#contact' }
+        ],
+        buttonText: 'Get Demo',
+        style: 'minimal'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 17',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-17.svg',
+      content: {
+        logo: 'SPARK',
+        links: [
+          { text: 'About', href: '#about' },
+          { text: 'Work', href: '#work' },
+          { text: 'Blog', href: '#blog' }
+        ],
+        buttonText: 'Hire Us',
+        style: 'colored'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 18',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-18.svg',
+      content: {
+        logo: 'PIXEL',
+        links: [
+          { text: 'Portfolio', href: '#portfolio' },
+          { text: 'Services', href: '#services' },
+          { text: 'Contact', href: '#contact' }
+        ],
+        buttonText: 'Start Now',
+        style: 'modern'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 19',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-19.svg',
+      content: {
+        logo: 'ZOOM',
+        links: [
+          { text: 'Features', href: '#features' },
+          { text: 'Pricing', href: '#pricing' },
+          { text: 'Resources', href: '#resources' }
+        ],
+        buttonText: 'Sign Up',
+        style: 'light'
+      }
+    },
+    {
+      type: 'menu',
+      name: 'Menu 20',
+      category: 'Menu',
+      preview: '/assets/thumbnails/menu/menu-20.svg',
+      content: {
+        logo: 'APEX',
+        links: [
+          { text: 'Solutions', href: '#solutions' },
+          { text: 'Cases', href: '#cases' },
+          { text: 'About', href: '#about' }
+        ],
+        buttonText: 'Contact',
+        style: 'dark'
+      }
+    },
+    // Header Blocks - 15 variante cu thumbnail-uri reale
     {
       type: 'header',
-      name: 'Hero Header',
+      name: 'Header 1',
       category: 'Header',
-      preview: 'https://images.unsplash.com/photo-1557682224-5b8590cd9ec5?w=400&h=200&fit=crop',
+      preview: '/assets/thumbnails/header/header-1.svg',
       content: {
-        title: 'Welcome to Your Website',
-        subtitle: 'Build amazing websites with ease',
-        buttonText: 'Get Started'
+        title: 'Create, connect, shine',
+        subtitle: 'Make your own website in a few clicks',
+        buttonText: 'Start Free',
+        style: 'gradient1'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 2',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-2.svg',
+      content: {
+        title: 'Experience the future',
+        subtitle: 'Do what you love doing with ease',
+        buttonText: 'Contact Us',
+        style: 'gradient2'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 3',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-3.svg',
+      content: {
+        title: 'Build Amazing Sites',
+        subtitle: 'Professional websites made simple',
+        buttonText: 'Get Started',
+        style: 'gradient3'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 4',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-4.svg',
+      content: {
+        title: 'Your Vision, Our Code',
+        subtitle: 'Transform ideas into reality',
+        buttonText: 'Learn More',
+        style: 'gradient4'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 5',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-5.svg',
+      content: {
+        title: 'Design Without Limits',
+        subtitle: 'Creativity meets simplicity',
+        buttonText: 'Try Now',
+        style: 'gradient5'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 6',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-6.svg',
+      content: {
+        title: 'Modern Web Solutions',
+        subtitle: 'Fast, responsive, beautiful',
+        buttonText: 'Explore',
+        style: 'dark'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 7',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-7.svg',
+      content: {
+        title: 'Grow Your Business',
+        subtitle: 'Online presence made easy',
+        buttonText: 'Start Today',
+        style: 'light'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 8',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-8.svg',
+      content: {
+        title: 'Innovation Starts Here',
+        subtitle: 'Create stunning websites instantly',
+        buttonText: 'Join Free',
+        style: 'purple'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 9',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-9.svg',
+      content: {
+        title: 'Your Success Story',
+        subtitle: 'Build websites that convert',
+        buttonText: 'Get Demo',
+        style: 'blue'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 10',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-10.svg',
+      content: {
+        title: 'Empower Your Ideas',
+        subtitle: 'No coding required',
+        buttonText: 'Sign Up',
+        style: 'green'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 11',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-11.svg',
+      content: {
+        title: 'Digital Excellence',
+        subtitle: 'Professional web design tools',
+        buttonText: 'Try Free',
+        style: 'gradient1'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 12',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-12.svg',
+      content: {
+        title: 'Create & Publish',
+        subtitle: 'Beautiful sites in minutes',
+        buttonText: 'Start Now',
+        style: 'gradient2'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 13',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-13.svg',
+      content: {
+        title: 'Web Made Simple',
+        subtitle: 'Drag, drop, done',
+        buttonText: 'Get Started',
+        style: 'gradient3'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 14',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-14.svg',
+      content: {
+        title: 'Build Your Brand',
+        subtitle: 'Stand out online',
+        buttonText: 'Learn More',
+        style: 'gradient4'
+      }
+    },
+    {
+      type: 'header',
+      name: 'Header 15',
+      category: 'Header',
+      preview: '/assets/thumbnails/header/header-15.svg',
+      content: {
+        title: 'Next Level Web',
+        subtitle: 'Modern design tools',
+        buttonText: 'Explore',
+        style: 'gradient5'
       }
     },
     // Text Blocks
