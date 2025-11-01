@@ -20,15 +20,22 @@ const BlocksPanel = () => {
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
-      // Load more when scrolled to 80% of content
-      if (scrollTop + clientHeight >= scrollHeight * 0.8) {
-        setVisibleCount(prev => prev + 6);
+      // Load more when scrolled to 70% of content (more aggressive)
+      if (scrollTop + clientHeight >= scrollHeight * 0.7) {
+        setVisibleCount(prev => {
+          const allBlocks = getBlocksForCategory(selectedCategory);
+          // Only increase if we have more blocks to show
+          if (prev < allBlocks.length) {
+            return prev + 6;
+          }
+          return prev;
+        });
       }
     };
 
     container.addEventListener('scroll', handleScroll);
     return () => container.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [selectedCategory, visibleCount]);
 
   // Definește toate categoriile disponibile
   const categories = [
