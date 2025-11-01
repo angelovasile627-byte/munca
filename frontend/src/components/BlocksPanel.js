@@ -610,6 +610,16 @@ const BlocksPanel = () => {
     return blockTemplates.filter(t => t.category === category);
   };
 
+  // Get visible blocks based on lazy loading
+  const getVisibleBlocks = () => {
+    const categoryBlocks = getBlocksForCategory(selectedCategory);
+    return categoryBlocks.slice(0, visibleCount);
+  };
+
+  const allBlocks = getBlocksForCategory(selectedCategory);
+  const visibleBlocks = getVisibleBlocks();
+  const hasMore = visibleBlocks.length < allBlocks.length;
+
   return (
     <>
       {/* Blocks Panel */}
@@ -635,21 +645,22 @@ const BlocksPanel = () => {
             <h3 className="text-white font-semibold text-lg">{selectedCategory}</h3>
           </div>
 
-          {/* Blocks Grid */}
-          <div className="flex-1 p-4 overflow-y-auto">
+          {/* Blocks Grid with Lazy Loading */}
+          <div ref={scrollContainerRef} className="flex-1 p-4 overflow-y-auto">
             <div className="grid grid-cols-2 gap-4">
-              {getBlocksForCategory(selectedCategory).map((template, index) => (
+              {visibleBlocks.map((template, index) => (
                 <button
                   key={index}
                   onClick={() => handleAddBlock(template)}
                   className="bg-slate-600 border-2 border-slate-500 hover:border-blue-400 rounded-lg transition-all overflow-hidden group"
                 >
-                  {/* Preview Image */}
-                  <div className="w-full h-32 overflow-hidden bg-slate-800">
+                  {/* Preview Image/SVG */}
+                  <div className="w-full h-32 overflow-hidden bg-slate-800 flex items-center justify-center">
                     <img 
                       src={template.preview} 
                       alt={template.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
                     />
                   </div>
                   
@@ -663,18 +674,35 @@ const BlocksPanel = () => {
               ))}
             </div>
 
-            {/* More Blocks Placeholder */}
-            {getBlocksForCategory(selectedCategory).length > 0 && (
+            {/* Loading More Indicator */}
+            {hasMore && (
               <div className="mt-6 flex items-center justify-center">
-                <div className="text-center p-4 bg-slate-600 rounded-lg">
-                  <div className="text-white text-sm">More {selectedCategory} Blocks</div>
-                  <div className="text-gray-400 text-xs mt-1">Coming soon...</div>
+                <div className="text-center p-4">
+                  <div className="animate-pulse flex space-x-2 justify-center items-center">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  </div>
+                  <div className="text-gray-400 text-xs mt-2">
+                    Scroll pentru mai multe blocuri...
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* All Blocks Loaded */}
+            {!hasMore && allBlocks.length > 0 && (
+              <div className="mt-6 flex items-center justify-center">
+                <div className="text-center p-3 bg-slate-600/50 rounded-lg">
+                  <div className="text-gray-400 text-xs">
+                    Toate blocurile {selectedCategory} au fost încărcate
+                  </div>
                 </div>
               </div>
             )}
 
             {/* Empty State */}
-            {getBlocksForCategory(selectedCategory).length === 0 && (
+            {allBlocks.length === 0 && (
               <div className="flex items-center justify-center h-64">
                 <div className="text-center text-gray-400">
                   <p className="text-lg mb-2">No blocks available</p>
