@@ -142,40 +142,27 @@ const PublishDialog = () => {
 
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
         
-        // Step 1: Save/Update site in MongoDB first
-        showInfo('📤 Salvez site-ul în baza de date...');
+        // Step 1: Sync site with MongoDB first
+        showInfo('📤 Sincronizez site-ul cu baza de date...');
         
         try {
-          // Check if site exists in MongoDB
-          const checkResponse = await fetch(`${backendUrl}/api/sites/${currentSite.id}`);
+          const syncResponse = await fetch(`${backendUrl}/api/sites/sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: currentSite.id,
+              name: currentSite.name,
+              status: currentSite.status,
+              pages: currentSite.pages
+            })
+          });
           
-          if (checkResponse.ok) {
-            // Site exists, update it
-            await fetch(`${backendUrl}/api/sites/${currentSite.id}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                name: currentSite.name,
-                status: currentSite.status,
-                pages: currentSite.pages
-              })
-            });
-          } else {
-            // Site doesn't exist, create it
-            await fetch(`${backendUrl}/api/sites`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                id: currentSite.id,
-                name: currentSite.name,
-                status: currentSite.status,
-                pages: currentSite.pages
-              })
-            });
+          if (!syncResponse.ok) {
+            throw new Error('Failed to sync site with database');
           }
         } catch (saveError) {
-          console.error('Error saving site:', saveError);
-          showError('Eroare la salvarea site-ului în baza de date!');
+          console.error('Error syncing site:', saveError);
+          showError('Eroare la sincronizarea site-ului cu baza de date!');
           setIsPublishing(false);
           return;
         }
