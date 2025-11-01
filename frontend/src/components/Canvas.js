@@ -69,26 +69,57 @@ const Canvas = () => {
                             snapshot.isDragging ? 'shadow-2xl' : ''
                           }`}
                         >
-                          {/* Drag Handle - Top Right */}
-                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                          {/* New Toolbar - Top Right with 3 Icons (Mobirise style) */}
+                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center gap-1">
+                            {/* Code/HTML Editor Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // TODO: Implement code editor functionality
+                                console.log('Code editor for block:', block.id);
+                              }}
+                              className="p-2 bg-white hover:bg-gray-50 text-gray-700 rounded-md shadow-md border border-gray-200 transition-all hover:shadow-lg"
+                              title="Edit HTML/Code"
+                              aria-label="Edit HTML/Code"
+                            >
+                              <FiCode size={16} />
+                            </button>
+
+                            {/* Settings/Gear Button (Teal/Turquoise like Mobirise) */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedBlockId(block.id);
+                                setBlockSettingsPanelOpen(true);
+                              }}
+                              className="p-2 bg-teal-500 hover:bg-teal-600 text-white rounded-md shadow-md transition-all hover:shadow-lg"
+                              title="Block Settings"
+                              aria-label="Block Settings"
+                            >
+                              <FiSettings size={16} />
+                            </button>
+
+                            {/* More Options Button (3 vertical dots) */}
                             <button
                               {...provided.dragHandleProps}
-                              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                              title="Drag to reorder"
+                              className="p-2 bg-white hover:bg-gray-50 text-gray-700 rounded-md shadow-md border border-gray-200 transition-all hover:shadow-lg"
+                              title="More options / Drag to reorder"
+                              aria-label="More options"
                             >
-                              <FiEdit2 size={16} />
+                              <FiMoreVertical size={16} />
                             </button>
-                          </div>
 
-                          {/* Delete Button - Bottom Right (Large and Visible) */}
-                          <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                            {/* Delete Button */}
                             <button
-                              onClick={() => removeBlock(block.id)}
-                              className="w-12 h-12 bg-red-500 text-white rounded-full hover:bg-red-600 flex items-center justify-center shadow-lg"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeBlock(block.id);
+                              }}
+                              className="p-2 bg-white hover:bg-red-50 text-red-600 rounded-md shadow-md border border-gray-200 transition-all hover:shadow-lg hover:border-red-300"
                               title="Delete block"
                               aria-label="Delete block"
                             >
-                              <FiTrash2 size={20} />
+                              <FiTrash2 size={16} />
                             </button>
                           </div>
 
