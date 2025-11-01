@@ -257,6 +257,28 @@ async def update_site(site_id: str, site_update: SiteUpdate):
     
     return await get_site(site_id)
 
+@api_router.post("/sites/sync")
+async def sync_site(site_data: SiteSync):
+    """Sync site from frontend - Create if doesn't exist, Update if exists"""
+    existing_site = await db.sites.find_one({"id": site_data.id}, {"_id": 0})
+    
+    site_dict = site_data.model_dump()
+    
+    if existing_site:
+        # Update existing site
+        site_dict['updatedAt'] = datetime.now(timezone.utc).isoformat()
+        site_dict['createdAt'] = existing_site.get('createdAt', datetime.now(timezone.utc).isoformat())
+        
+        await db.sites.replace_one({"id": site_data.id}, site_dict)
+        return {"success": True, "action": "updated", "site_id": site_data.id}
+    else:
+        # Create new site
+        site_dict['createdAt'] = datetime.now(timezone.utc).isoformat()
+        site_dict['updatedAt'] = datetime.now(timezone.utc).isoformat()
+        
+        await db.sites.insert_one(site_dict)
+        return {"success": True, "action": "created", "site_id": site_data.id}
+
 @api_router.delete("/sites/{site_id}")
 async def delete_site(site_id: str):
     """Delete a site"""
