@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="200" fill="#1F2937"/>
+  
+  <!-- Title -->
+  <text x="200" y="80" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+    Modern Web Solutions
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="200" y="110" font-family="Arial, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle" opacity="0.9">
+    Fast, responsive, beautiful
+  </text>
+  
+  <!-- Button -->
+  <rect x="150" y="130" width="100" height="35" rx="17.5" fill="#FFFFFF" opacity="0.3"/>
+  <rect x="152" y="132" width="96" height="31" rx="15.5" fill="#FFFFFF" opacity="0.2"/>
+  <text x="200" y="153" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+    Explore
+  </text>
+</svg>

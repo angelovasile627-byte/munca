@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="80" fill="#FFFFFF"/>
+  
+  <!-- Logo -->
+  <text x="20" y="46" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333333">
+    WAVE
+  </text>
+  
+  <!-- Links -->
+  <text x="120" y="45" font-family="Arial, sans-serif" font-size="12" fill="#666666">
+    Solutions
+  </text>
+  <text x="180" y="45" font-family="Arial, sans-serif" font-size="12" fill="#666666">
+    Pricing
+  </text>
+  <text x="240" y="45" font-family="Arial, sans-serif" font-size="12" fill="#666666">
+    Blog
+  </text>
+  
+  <!-- Button -->
+  <rect x="300" y="25" width="85" height="30" rx="15" fill="#4F46E5"/>
+  <text x="342.5" y="45" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+    Contact Us
+  </text>
+</svg>
