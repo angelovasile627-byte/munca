@@ -14,6 +14,8 @@ export const BuilderProvider = ({ children }) => {
   const [blocksPanelOpen, setBlocksPanelOpen] = useState(false);
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const [siteStylesPanelOpen, setSiteStylesPanelOpen] = useState(false);
+  const [blockSettingsPanelOpen, setBlockSettingsPanelOpen] = useState(false);
+  const [selectedBlockId, setSelectedBlockId] = useState(null);
   const [mobilePreview, setMobilePreview] = useState(false);
   const [centerPanelView, setCenterPanelView] = useState(null); // 'pages', 'sites', 'settings', null - Start with null (closed)
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
