@@ -608,8 +608,8 @@ const BlocksPanel = () => {
       type: template.type,
       content: template.content
     });
-    // Nu închide panelul automat - rămâne deschis până când utilizatorul dă click în canvas
-    // setBlocksPanelOpen(false);
+    // Închide panelul după adăugare pentru a evita probleme cu viewport
+    setBlocksPanelOpen(false);
   };
 
   // Group blocks by category
