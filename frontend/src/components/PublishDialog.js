@@ -5,7 +5,7 @@ import { useToast } from '../context/ToastContext';
 import FTPManagerDialog from './FTPManagerDialog';
 
 const PublishDialog = () => {
-  const { publishDialogOpen, setPublishDialogOpen, currentSite, currentPage, sites, setSites, setCurrentSiteId, setCurrentPageId } = useBuilder();
+  const { publishDialogOpen, setPublishDialogOpen, currentSite, currentPage, sites, setSites, setCurrentSiteId, setCurrentPageId, ftpSettings } = useBuilder();
   const { showSuccess, showError, showInfo } = useToast();
   const [publishMethod, setPublishMethod] = useState('project'); // 'project', 'local', 'ftp'
   const [publishOnlyChanges, setPublishOnlyChanges] = useState(false);
