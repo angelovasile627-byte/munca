@@ -80,6 +80,9 @@ const BuilderContent = () => {
         )}
       </div>
 
+      {/* Block Settings Panel - Fixed position, rendered outside main flow */}
+      {blockSettingsPanelOpen && <BlockSettingsPanel />}
+
       {/* Publish Dialog */}
       <PublishDialog />
       
