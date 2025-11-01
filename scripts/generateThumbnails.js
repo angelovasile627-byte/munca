@@ -3,7 +3,7 @@ const path = require('path');
 
 // Funcție pentru a genera SVG thumbnail pentru un meniu
 function generateMenuThumbnail(config) {
-  const { logo, links, buttonText, style, width = 400, height = 80 } = config;
+  const { logo, links, buttonText, style, width = 360, height = 60 } = config;
   
   // Stiluri diferite pentru meniuri
   const styles = {
