@@ -68,7 +68,7 @@ function generateMenuThumbnail(config) {
   <rect width="${width}" height="${height}" fill="${currentStyle.bg.startsWith('url') ? 'url(#grad1)' : currentStyle.bg}"/>
   
   <!-- Logo -->
-  <text x="20" y="${height/2 + 6}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="${currentStyle.text}">
+  <text x="15" y="${height/2 + 4}" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="${currentStyle.text}">
     ${logo}
   </text>
   
@@ -76,18 +76,18 @@ function generateMenuThumbnail(config) {
 
   links.forEach((link, index) => {
     svgContent += `
-  <text x="${startX + (index * linkSpacing)}" y="${height/2 + 5}" font-family="Arial, sans-serif" font-size="12" fill="${currentStyle.linkText}">
+  <text x="${startX + (index * linkSpacing)}" y="${height/2 + 4}" font-family="Arial, sans-serif" font-size="10" fill="${currentStyle.linkText}">
     ${link.text}
   </text>`;
   });
 
   // Button
-  const buttonX = width - 100;
+  const buttonX = width - 85;
   svgContent += `
   
   <!-- Button -->
-  <rect x="${buttonX}" y="${height/2 - 15}" width="85" height="30" rx="15" fill="${currentStyle.buttonBg}"/>
-  <text x="${buttonX + 42.5}" y="${height/2 + 5}" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="${currentStyle.buttonText}" text-anchor="middle">
+  <rect x="${buttonX}" y="${height/2 - 12}" width="75" height="24" rx="12" fill="${currentStyle.buttonBg}"/>
+  <text x="${buttonX + 37.5}" y="${height/2 + 4}" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="${currentStyle.buttonText}" text-anchor="middle">
     ${buttonText}
   </text>
 </svg>`;
