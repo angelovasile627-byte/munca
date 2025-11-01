@@ -460,7 +460,12 @@ export const BuilderProvider = ({ children }) => {
     setSiteStyles,
     updateSiteStyles,
     siteStylesPanelOpen,
-    setSiteStylesPanelOpen
+    setSiteStylesPanelOpen,
+    // Block Settings Panel
+    blockSettingsPanelOpen,
+    setBlockSettingsPanelOpen,
+    selectedBlockId,
+    setSelectedBlockId
   };
 
   return (
