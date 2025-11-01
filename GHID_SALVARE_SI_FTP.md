@@ -168,10 +168,17 @@ Root Folder: (lasă gol pentru root)
 - ✅ Portul corect? (de obicei `21` pentru FTP)
 - ✅ Username/Password corecte?
 
+**Proces Publicare FTP:**
+Când apeși "PUBLISH" cu FTP selectat, aplicația face următoarele:
+1. **Sincronizează** site-ul cu baza de date MongoDB (salvează toate paginile și blocurile)
+2. **Se conectează** la serverul FTP cu datele configurate
+3. **Urcă** toate paginile ca fișiere HTML pe server
+
 **Dacă Test Connection reușește dar Publish nu funcționează:**
-- Verifică logurile din consola browser-ului (F12)
-- Verifică dacă ai permisiuni de scriere pe folder
-- Contactează hosting-ul pentru verificare
+- Verifică consola browser-ului (F12 → Console) pentru erori detaliate
+- Verifică dacă mesajul "📤 Sincronizez site-ul cu baza de date..." apare
+- Verifică dacă ai permisiuni de scriere pe folderul FTP
+- Asigură-te că ai creat cel puțin o pagină cu blocuri (site-ul nu e gol)
 
 ### **5. Pot exporta doar o pagină?**
 - Momentan, Export HTML (ZIP) și FTP publică **toate paginile** site-ului curent
