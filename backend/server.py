@@ -610,9 +610,14 @@ async def test_ftp_connection(settings: FTPSettings):
         raise HTTPException(status_code=500, detail=f"Connection failed: {str(e)}")
 
 
+class FTPPublishRequest(BaseModel):
+    ftpSettings: FTPSettings
+    onlyChanges: Optional[bool] = False
+
+
 @api_router.post("/sites/{site_id}/publish-ftp")
-async def publish_site_via_ftp(site_id: str, settings: Dict[str, Any]):
-    """Publish site via FTP"""
+async def publish_site_via_ftp(site_id: str, request: FTPPublishRequest):
+    """Publish site via FTP - Upload all HTML files to FTP server"""
     import ftplib
     from contextlib import closing
     import io
@@ -622,21 +627,78 @@ async def publish_site_via_ftp(site_id: str, settings: Dict[str, Any]):
     if not site:
         raise HTTPException(status_code=404, detail="Site not found")
     
-    # Get FTP settings from request or use stored settings
-    # For now, we'll return a message that FTP settings need to be configured
+    ftp_settings = request.ftpSettings
+    
+    # Validate FTP settings
+    if not ftp_settings.host or not ftp_settings.username:
+        raise HTTPException(
+            status_code=400, 
+            detail="FTP settings incomplete. Please configure FTP in FTP Manager first."
+        )
     
     try:
-        # Note: In a real implementation, you'd:
-        # 1. Get FTP credentials from settings
-        # 2. Connect to FTP server
-        # 3. Upload all HTML files
-        # 4. Upload assets (images, etc.)
+        uploaded_files = []
+        
+        # Only FTP is supported for now
+        if ftp_settings.protocol != "FTP":
+            raise HTTPException(
+                status_code=400,
+                detail=f"{ftp_settings.protocol} not yet implemented. Please use FTP for now."
+            )
+        
+        # Connect to FTP server
+        with closing(ftplib.FTP()) as ftp:
+            # Connect
+            ftp.connect(ftp_settings.host, ftp_settings.port, timeout=30)
+            
+            # Login
+            ftp.login(ftp_settings.username, ftp_settings.password)
+            
+            # Change to root folder if specified
+            if ftp_settings.rootFolder:
+                try:
+                    ftp.cwd(ftp_settings.rootFolder)
+                except:
+                    # Try to create the folder if it doesn't exist
+                    try:
+                        ftp.mkd(ftp_settings.rootFolder)
+                        ftp.cwd(ftp_settings.rootFolder)
+                    except Exception as e:
+                        raise HTTPException(
+                            status_code=400,
+                            detail=f"Cannot access or create root folder '{ftp_settings.rootFolder}': {str(e)}"
+                        )
+            
+            # Upload each page as HTML file
+            for page in site.get('pages', []):
+                # Generate HTML content
+                html_content = generate_html_export(page, site['name'])
+                
+                # Get filename
+                page_filename = page.get('pageUrl', f"{page['name'].lower().replace(' ', '-')}.html")
+                
+                # Upload file
+                file_buffer = io.BytesIO(html_content.encode('utf-8'))
+                ftp.storbinary(f'STOR {page_filename}', file_buffer)
+                
+                uploaded_files.append(page_filename)
+                
+            # Close connection
+            ftp.quit()
         
         return {
             "success": True,
-            "message": "FTP publishing feature requires FTP credentials. Please configure in FTP Manager first.",
-            "note": "This is a simulated response. Full FTP implementation requires secure credential storage."
+            "message": f"Site published successfully via FTP!",
+            "uploaded_files": uploaded_files,
+            "total_files": len(uploaded_files),
+            "host": ftp_settings.host,
+            "folder": ftp_settings.rootFolder or "/"
         }
+        
+    except ftplib.error_perm as e:
+        raise HTTPException(status_code=401, detail=f"FTP Authentication failed: {str(e)}")
+    except ftplib.error_temp as e:
+        raise HTTPException(status_code=503, detail=f"FTP Temporary error: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"FTP publish failed: {str(e)}")
 
