@@ -92,6 +92,32 @@ export const BuilderProvider = ({ children }) => {
     }
   }, []);
 
+  // Sync all sites with MongoDB on initialization
+  useEffect(() => {
+    const syncAllSites = async () => {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      
+      for (const site of sites) {
+        try {
+          await fetch(`${backendUrl}/api/sites/sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: site.id,
+              name: site.name,
+              status: site.status,
+              pages: site.pages
+            })
+          });
+        } catch (error) {
+          console.error(`Error syncing site ${site.id}:`, error);
+        }
+      }
+    };
+
+    syncAllSites();
+  }, []); // Run once on mount
+
   // Get current site and page
   const currentSite = sites.find(s => s.id === currentSiteId) || sites[0];
   const currentPage = currentSite?.pages.find(p => p.id === currentPageId) || currentSite?.pages[0];
