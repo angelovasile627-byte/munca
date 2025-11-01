@@ -662,11 +662,11 @@ const BlocksPanel = () => {
                   className="bg-slate-600 border-2 border-slate-500 hover:border-blue-400 rounded-lg transition-all overflow-hidden group"
                 >
                   {/* Preview Image/SVG */}
-                  <div className="w-full h-32 overflow-hidden bg-slate-800 flex items-center justify-center">
+                  <div className="w-full h-auto overflow-hidden bg-slate-800 flex items-center justify-center p-2">
                     <img 
                       src={template.preview} 
                       alt={template.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300"
                       loading="lazy"
                     />
                   </div>
