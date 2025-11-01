@@ -140,8 +140,49 @@ const PublishDialog = () => {
           return;
         }
 
-        // Upload via FTP
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        
+        // Step 1: Save/Update site in MongoDB first
+        showInfo('📤 Salvez site-ul în baza de date...');
+        
+        try {
+          // Check if site exists in MongoDB
+          const checkResponse = await fetch(`${backendUrl}/api/sites/${currentSite.id}`);
+          
+          if (checkResponse.ok) {
+            // Site exists, update it
+            await fetch(`${backendUrl}/api/sites/${currentSite.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: currentSite.name,
+                status: currentSite.status,
+                pages: currentSite.pages
+              })
+            });
+          } else {
+            // Site doesn't exist, create it
+            await fetch(`${backendUrl}/api/sites`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: currentSite.id,
+                name: currentSite.name,
+                status: currentSite.status,
+                pages: currentSite.pages
+              })
+            });
+          }
+        } catch (saveError) {
+          console.error('Error saving site:', saveError);
+          showError('Eroare la salvarea site-ului în baza de date!');
+          setIsPublishing(false);
+          return;
+        }
+
+        // Step 2: Upload via FTP
+        showInfo('🌐 Upload pe FTP...');
+        
         const response = await fetch(
           `${backendUrl}/api/sites/${currentSite.id}/publish-ftp`,
           {
