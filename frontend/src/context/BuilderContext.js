@@ -427,6 +427,9 @@ export const BuilderProvider = ({ children }) => {
         if (response.ok) {
           const styles = await response.json();
           setSiteStyles(styles);
+        } else if (response.status === 404) {
+          // Site doesn't exist in MongoDB yet, use default styles
+          console.log(`Site ${currentSiteId} not found in database, using default styles`);
         }
       } catch (error) {
         console.error('Error loading site styles:', error);
@@ -434,7 +437,8 @@ export const BuilderProvider = ({ children }) => {
     };
 
     if (currentSiteId) {
-      loadSiteStyles();
+      // Small delay to allow sync to complete first
+      setTimeout(loadSiteStyles, 500);
     }
   }, [currentSiteId]);
 
