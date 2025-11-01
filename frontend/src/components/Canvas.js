@@ -1,7 +1,7 @@
 import React from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useBuilder } from '../context/BuilderContext';
-import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiSettings, FiCode, FiMoreVertical } from 'react-icons/fi';
 
 const Canvas = () => {
   const { 
@@ -10,7 +10,9 @@ const Canvas = () => {
     reorderBlocks, 
     removeBlock,
     setBlocksPanelOpen,
-    blocksPanelOpen
+    blocksPanelOpen,
+    setBlockSettingsPanelOpen,
+    setSelectedBlockId
   } = useBuilder();
 
   const handleDragEnd = (result) => {
