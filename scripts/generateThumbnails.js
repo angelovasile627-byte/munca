@@ -153,19 +153,19 @@ function generateHeaderThumbnail(config) {
   <rect width="${width}" height="${height}" fill="${bgColor}"/>
   
   <!-- Title -->
-  <text x="${width/2}" y="80" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="${currentStyle.text}" text-anchor="middle">
+  <text x="${width/2}" y="70" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="${currentStyle.text}" text-anchor="middle">
     ${title}
   </text>
   
   <!-- Subtitle -->
-  <text x="${width/2}" y="110" font-family="Arial, sans-serif" font-size="14" fill="${currentStyle.text}" text-anchor="middle" opacity="0.9">
+  <text x="${width/2}" y="95" font-family="Arial, sans-serif" font-size="11" fill="${currentStyle.text}" text-anchor="middle" opacity="0.9">
     ${subtitle}
   </text>
   
   <!-- Button -->
-  <rect x="${width/2 - 50}" y="130" width="100" height="35" rx="17.5" fill="#FFFFFF" opacity="0.3"/>
-  <rect x="${width/2 - 48}" y="132" width="96" height="31" rx="15.5" fill="${currentStyle.text}" opacity="0.2"/>
-  <text x="${width/2}" y="153" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="${currentStyle.text}" text-anchor="middle">
+  <rect x="${width/2 - 45}" y="110" width="90" height="30" rx="15" fill="#FFFFFF" opacity="0.3"/>
+  <rect x="${width/2 - 43}" y="112" width="86" height="26" rx="13" fill="${currentStyle.text}" opacity="0.2"/>
+  <text x="${width/2}" y="130" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="${currentStyle.text}" text-anchor="middle">
     ${buttonText}
   </text>
 </svg>`;
