@@ -97,7 +97,7 @@ function generateMenuThumbnail(config) {
 
 // Funcție pentru a genera SVG thumbnail pentru header
 function generateHeaderThumbnail(config) {
-  const { title, subtitle, buttonText, style, width = 400, height = 200 } = config;
+  const { title, subtitle, buttonText, style, width = 360, height = 180 } = config;
   
   const styles = {
     gradient1: { bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', text: '#FFFFFF' },
