@@ -677,7 +677,7 @@ const BlocksPanel = () => {
                       {template.name}
                     </div>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
 
