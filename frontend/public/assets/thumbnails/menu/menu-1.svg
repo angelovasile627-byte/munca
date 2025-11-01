@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="400" height="80" xmlns="http://www.w3.org/2000/svg">
+<svg width="360" height="60" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
@@ -8,27 +8,27 @@
   </defs>
   
   <!-- Background -->
-  <rect width="400" height="80" fill="#FFFFFF"/>
+  <rect width="360" height="60" fill="#FFFFFF"/>
   
   <!-- Logo -->
-  <text x="20" y="46" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333333">
+  <text x="15" y="34" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#333333">
     Mobirise
   </text>
   
   <!-- Links -->
-  <text x="120" y="45" font-family="Arial, sans-serif" font-size="12" fill="#666666">
+  <text x="120" y="34" font-family="Arial, sans-serif" font-size="10" fill="#666666">
     About
   </text>
-  <text x="180" y="45" font-family="Arial, sans-serif" font-size="12" fill="#666666">
+  <text x="180" y="34" font-family="Arial, sans-serif" font-size="10" fill="#666666">
     Services
   </text>
-  <text x="240" y="45" font-family="Arial, sans-serif" font-size="12" fill="#666666">
+  <text x="240" y="34" font-family="Arial, sans-serif" font-size="10" fill="#666666">
     Contacts
   </text>
   
   <!-- Button -->
-  <rect x="300" y="25" width="85" height="30" rx="15" fill="#4F46E5"/>
-  <text x="342.5" y="45" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+  <rect x="275" y="18" width="75" height="24" rx="12" fill="#4F46E5"/>
+  <text x="312.5" y="34" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
     Start Now!
   </text>
 </svg>

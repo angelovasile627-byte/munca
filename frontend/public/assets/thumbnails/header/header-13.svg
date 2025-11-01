@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+<svg width="360" height="180" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="headerGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
@@ -8,22 +8,22 @@
   </defs>
   
   <!-- Background -->
-  <rect width="400" height="200" fill="url(#headerGrad3)"/>
+  <rect width="360" height="180" fill="url(#headerGrad3)"/>
   
   <!-- Title -->
-  <text x="200" y="80" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+  <text x="180" y="70" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
     Web Made Simple
   </text>
   
   <!-- Subtitle -->
-  <text x="200" y="110" font-family="Arial, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle" opacity="0.9">
+  <text x="180" y="95" font-family="Arial, sans-serif" font-size="11" fill="#FFFFFF" text-anchor="middle" opacity="0.9">
     Drag, drop, done
   </text>
   
   <!-- Button -->
-  <rect x="150" y="130" width="100" height="35" rx="17.5" fill="#FFFFFF" opacity="0.3"/>
-  <rect x="152" y="132" width="96" height="31" rx="15.5" fill="#FFFFFF" opacity="0.2"/>
-  <text x="200" y="153" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+  <rect x="135" y="110" width="90" height="30" rx="15" fill="#FFFFFF" opacity="0.3"/>
+  <rect x="137" y="112" width="86" height="26" rx="13" fill="#FFFFFF" opacity="0.2"/>
+  <text x="180" y="130" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
     Get Started
   </text>
 </svg>
