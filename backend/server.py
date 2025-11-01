@@ -129,6 +129,14 @@ class SiteCreate(BaseModel):
 class SiteUpdate(BaseModel):
     name: Optional[str] = None
     status: Optional[str] = None
+    pages: Optional[List[Page]] = None
+
+class SiteSync(BaseModel):
+    """Complete site data for sync from frontend"""
+    id: str
+    name: str
+    status: str
+    pages: List[Page]
 
 class StatusCheck(BaseModel):
     model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
