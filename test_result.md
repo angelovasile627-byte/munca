@@ -528,15 +528,18 @@ backend:
 
   - task: "FTP Publish Site API Endpoint"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "testing"
         comment: "✅ FTP Publish Site endpoint (POST /api/sites/{site_id}/publish-ftp) fully functional. Returns proper message about FTP credentials configuration requirement. Correctly handles invalid site IDs with 404 responses. Error handling works as expected for FTP publishing workflow."
+      - working: "NA"
+        agent: "main"
+        comment: "MAJOR UPDATE: Enhanced FTP publish to upload complete functional website. Now uploads: 1) All HTML pages with external CSS references, 2) styles.css file with all site styles, 3) images/ folder with all images from blocks and social sharing. Fixed image paths to be relative (images/filename.jpg). First page is always uploaded as index.html. Added helper functions: generate_css_file(), extract_image_urls_from_page(). Site should now be fully functional after FTP upload."
 
 metadata:
   created_by: "testing_agent"
