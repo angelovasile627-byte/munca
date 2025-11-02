@@ -748,7 +748,7 @@ class FTPPublishRequest(BaseModel):
 
 @api_router.post("/sites/{site_id}/publish-ftp")
 async def publish_site_via_ftp(site_id: str, request: FTPPublishRequest):
-    """Publish site via FTP - Upload all HTML files to FTP server"""
+    """Publish site via FTP - Upload HTML files, CSS, and images to FTP server"""
     import ftplib
     from contextlib import closing
     import io
@@ -777,6 +777,12 @@ async def publish_site_via_ftp(site_id: str, request: FTPPublishRequest):
                 detail=f"{ftp_settings.protocol} not yet implemented. Please use FTP for now."
             )
         
+        # Collect all images from all pages
+        all_images = set()
+        for page in site.get('pages', []):
+            images = extract_image_urls_from_page(page)
+            all_images.update(images)
+        
         # Connect to FTP server
         with closing(ftplib.FTP()) as ftp:
             # Connect
@@ -800,19 +806,60 @@ async def publish_site_via_ftp(site_id: str, request: FTPPublishRequest):
                             detail=f"Cannot access or create root folder '{ftp_settings.rootFolder}': {str(e)}"
                         )
             
-            # Upload each page as HTML file
+            # Create images directory on FTP if there are images
+            if all_images:
+                try:
+                    ftp.mkd('images')
+                except ftplib.error_perm:
+                    # Directory already exists, that's fine
+                    pass
+            
+            # Upload images
+            for image_url in all_images:
+                try:
+                    # Extract filename from URL
+                    filename = image_url.split('/uploads/')[-1]
+                    local_path = UPLOAD_DIR / filename
+                    
+                    # Check if file exists locally
+                    if local_path.exists():
+                        with open(local_path, 'rb') as img_file:
+                            ftp.storbinary(f'STOR images/{filename}', img_file)
+                        uploaded_files.append(f'images/{filename}')
+                except Exception as img_error:
+                    # Log but don't fail - continue uploading other files
+                    logger.warning(f"Failed to upload image {filename}: {str(img_error)}")
+            
+            # Generate and upload CSS file
+            css_content = generate_css_file()
+            css_buffer = io.BytesIO(css_content.encode('utf-8'))
+            ftp.storbinary('STOR styles.css', css_buffer)
+            uploaded_files.append('styles.css')
+            
+            # Upload each page as HTML file (with external CSS)
             for page in site.get('pages', []):
-                # Generate HTML content
-                html_content = generate_html_export(page, site['name'])
+                # Generate HTML content with external CSS
+                html_content = generate_html_export(page, site['name'], use_external_css=True)
                 
                 # Get filename
                 page_filename = page.get('pageUrl', f"{page['name'].lower().replace(' ', '-')}.html")
                 
-                # Upload file
-                file_buffer = io.BytesIO(html_content.encode('utf-8'))
-                ftp.storbinary(f'STOR {page_filename}', file_buffer)
-                
-                uploaded_files.append(page_filename)
+                # Ensure first page is also saved as index.html
+                if page == site.get('pages', [])[0] and page_filename != 'index.html':
+                    # Upload with both names
+                    file_buffer = io.BytesIO(html_content.encode('utf-8'))
+                    ftp.storbinary(f'STOR {page_filename}', file_buffer)
+                    uploaded_files.append(page_filename)
+                    
+                    # Also upload as index.html
+                    file_buffer = io.BytesIO(html_content.encode('utf-8'))
+                    ftp.storbinary('STOR index.html', file_buffer)
+                    uploaded_files.append('index.html')
+                else:
+                    # Upload file
+                    file_buffer = io.BytesIO(html_content.encode('utf-8'))
+                    ftp.storbinary(f'STOR {page_filename}', file_buffer)
+                    uploaded_files.append(page_filename)
                 
             # Close connection
             ftp.quit()
@@ -823,7 +870,8 @@ async def publish_site_via_ftp(site_id: str, request: FTPPublishRequest):
             "uploaded_files": uploaded_files,
             "total_files": len(uploaded_files),
             "host": ftp_settings.host,
-            "folder": ftp_settings.rootFolder or "/"
+            "folder": ftp_settings.rootFolder or "/",
+            "images_uploaded": len([f for f in uploaded_files if f.startswith('images/')])
         }
         
     except ftplib.error_perm as e:
