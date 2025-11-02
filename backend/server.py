@@ -899,7 +899,7 @@ async def publish_site_via_ftp(site_id: str, request: FTPPublishRequest):
         
         return {
             "success": True,
-            "message": f"Site published successfully via FTP!",
+            "message": "Site published successfully via FTP!",
             "uploaded_files": uploaded_files,
             "total_files": len(uploaded_files),
             "host": ftp_settings.host,
