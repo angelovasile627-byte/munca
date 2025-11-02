@@ -644,7 +644,7 @@ def extract_image_urls_from_page(page: Dict[str, Any]) -> List[str]:
 
 @api_router.get("/sites/{site_id}/export-zip")
 async def export_site_as_zip(site_id: str):
-    """Export entire site as ZIP file"""
+    """Export entire site as ZIP file with HTML, CSS, and images"""
     import zipfile
     import io
     from fastapi.responses import StreamingResponse
@@ -654,16 +654,43 @@ async def export_site_as_zip(site_id: str):
     if not site:
         raise HTTPException(status_code=404, detail="Site not found")
     
+    # Collect all images from all pages
+    all_images = set()
+    for page in site.get('pages', []):
+        images = extract_image_urls_from_page(page)
+        all_images.update(images)
+    
     # Create a ZIP file in memory
     zip_buffer = io.BytesIO()
     
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-        # Export each page as HTML
-        for page in site.get('pages', []):
-            html_content = generate_html_export(page, site['name'])
+        # Add CSS file
+        css_content = generate_css_file()
+        zip_file.writestr("styles.css", css_content)
+        
+        # Add images
+        for image_url in all_images:
+            try:
+                filename = image_url.split('/uploads/')[-1]
+                local_path = UPLOAD_DIR / filename
+                
+                if local_path.exists():
+                    zip_file.write(local_path, f"images/{filename}")
+            except Exception as e:
+                logger.warning(f"Failed to add image {filename} to ZIP: {str(e)}")
+        
+        # Export each page as HTML (with external CSS)
+        for i, page in enumerate(site.get('pages', [])):
+            html_content = generate_html_export(page, site['name'], use_external_css=True)
             page_name = page.get('name', 'page')
             page_filename = page.get('pageUrl', f"{page_name}.html")
+            
+            # Add to ZIP
             zip_file.writestr(page_filename, html_content)
+            
+            # First page also gets copied as index.html if it's not already named that
+            if i == 0 and page_filename != 'index.html':
+                zip_file.writestr("index.html", html_content)
         
         # Add a README file
         site_name = site['name']
@@ -674,12 +701,18 @@ async def export_site_as_zip(site_id: str):
 
 This site was exported from Mobirise Builder Clone.
 
+Files included:
+- styles.css (main stylesheet)
+- images/ (folder with all images)
+- HTML files for each page
+
 Pages included:
 {pages_list}
 
 To use this site:
 1. Extract all files to your web server
-2. Open index.html in your browser
+2. Upload to your hosting via FTP
+3. Open index.html in your browser
 
 Generated on: {generated_time}
 """
