@@ -481,6 +481,18 @@ backend:
         agent: "main"
         comment: "UPDATED: Enhanced generate_html_export() to support external CSS and relative image paths. Can now generate HTML with link to styles.css instead of inline styles. Image paths converted from absolute backend URLs to relative paths (images/filename.jpg)."
 
+  - task: "ZIP Export with Assets"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "UPDATED: Enhanced GET /api/sites/{site_id}/export-zip to include all assets. ZIP now contains: 1) All HTML pages with external CSS, 2) styles.css file, 3) images/ folder with all images, 4) README.txt. First page is included as both its original name and index.html."
+
   - task: "MongoDB Page Schema Extension"
     implemented: true
     working: "NA"
