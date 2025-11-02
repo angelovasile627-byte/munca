@@ -187,10 +187,19 @@ def test_ftp_publish_invalid_site():
     print("-" * 40)
     
     invalid_site_id = "invalid-site-id-12345"
-    ftp_settings = {}
+    ftp_request = {
+        "ftpSettings": {
+            "protocol": "FTP",
+            "host": "ftp.example.com",
+            "port": 21,
+            "username": "testuser",
+            "password": "testpass",
+            "rootFolder": "/public_html"
+        }
+    }
     
     try:
-        response = requests.post(f"{API_URL}/sites/{invalid_site_id}/publish-ftp", json=ftp_settings, timeout=10)
+        response = requests.post(f"{API_URL}/sites/{invalid_site_id}/publish-ftp", json=ftp_request, timeout=10)
         
         print(f"Status Code: {response.status_code}")
         print(f"Response: {response.text}")
