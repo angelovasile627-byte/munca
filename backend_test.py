@@ -206,6 +206,116 @@ def test_ftp_publish_invalid_site():
         print(f"❌ FAIL: Request failed - {str(e)}")
         return False
 
+def test_zip_export_enhancement(site_id):
+    """Test enhanced ZIP export endpoint"""
+    print(f"\n🔧 Testing Enhanced ZIP Export Endpoint (Site ID: {site_id})")
+    print("-" * 40)
+    
+    try:
+        response = requests.get(f"{API_URL}/sites/{site_id}/export-zip", timeout=30)
+        
+        print(f"Status Code: {response.status_code}")
+        print(f"Content-Type: {response.headers.get('content-type', 'N/A')}")
+        print(f"Content-Length: {len(response.content)} bytes")
+        
+        if response.status_code == 200:
+            # Check if response is a ZIP file
+            if response.headers.get('content-type') == 'application/zip':
+                print("✅ PASS: Response is a ZIP file")
+                
+                # Try to read ZIP contents
+                try:
+                    zip_buffer = io.BytesIO(response.content)
+                    with zipfile.ZipFile(zip_buffer, 'r') as zip_file:
+                        file_list = zip_file.namelist()
+                        print(f"   ZIP contains {len(file_list)} files:")
+                        
+                        # Check for required files
+                        has_html = any(f.endswith('.html') for f in file_list)
+                        has_css = 'styles.css' in file_list
+                        has_images_folder = any(f.startswith('images/') for f in file_list)
+                        has_readme = 'README.txt' in file_list
+                        
+                        for file in file_list[:10]:  # Show first 10 files
+                            print(f"     - {file}")
+                        if len(file_list) > 10:
+                            print(f"     ... and {len(file_list) - 10} more files")
+                        
+                        print(f"   ✅ HTML files: {'Yes' if has_html else 'No'}")
+                        print(f"   ✅ CSS file (styles.css): {'Yes' if has_css else 'No'}")
+                        print(f"   ✅ Images folder: {'Yes' if has_images_folder else 'No'}")
+                        print(f"   ✅ README file: {'Yes' if has_readme else 'No'}")
+                        
+                        if has_html and has_css and has_readme:
+                            print("✅ PASS: ZIP contains all required components")
+                            return True
+                        else:
+                            print("⚠️  WARNING: ZIP missing some expected components")
+                            return False
+                            
+                except zipfile.BadZipFile:
+                    print("❌ FAIL: Response is not a valid ZIP file")
+                    return False
+            else:
+                print(f"❌ FAIL: Expected ZIP file, got {response.headers.get('content-type')}")
+                return False
+        else:
+            print(f"❌ FAIL: Unexpected status code {response.status_code}")
+            print(f"Response: {response.text[:200]}...")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print(f"❌ FAIL: Request failed - {str(e)}")
+        return False
+
+def add_test_page_with_content(site_id):
+    """Add a test page with some content to make ZIP export more meaningful"""
+    print(f"\n🔧 Adding Test Page with Content (Site ID: {site_id})")
+    print("-" * 40)
+    
+    # Create a page with some blocks
+    page_data = {
+        "name": "Test Page",
+        "pageUrl": "test-page.html"
+    }
+    
+    try:
+        # Create page
+        response = requests.post(f"{API_URL}/sites/{site_id}/pages", json=page_data, timeout=10)
+        
+        if response.status_code == 200:
+            page = response.json()
+            page_id = page.get('id')
+            print(f"✅ Test page created with ID: {page_id}")
+            
+            # Update page with some blocks and settings
+            page_update = {
+                "blocks": [
+                    {"id": "block1", "type": "hero", "content": "Welcome to Test Site"},
+                    {"id": "block2", "type": "text", "content": "This is test content"},
+                    {"id": "block3", "type": "features", "content": "Features section"}
+                ],
+                "pageDescription": "Test page for ZIP export",
+                "headCode": "<!-- Test head code -->",
+                "bodyEndCode": "<!-- Test body end code -->"
+            }
+            
+            update_response = requests.put(f"{API_URL}/sites/{site_id}/pages/{page_id}", json=page_update, timeout=10)
+            
+            if update_response.status_code == 200:
+                print("✅ Test page updated with content and settings")
+                return True
+            else:
+                print(f"⚠️  Warning: Could not update page content: {update_response.status_code}")
+                return True  # Page created, just not updated
+        else:
+            print(f"⚠️  Warning: Could not create test page: {response.status_code}")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print(f"⚠️  Warning: Could not create test page - {str(e)}")
+        return False
+
 def cleanup_test_site(site_id):
     """Clean up test site"""
     if site_id:
