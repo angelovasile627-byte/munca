@@ -438,8 +438,14 @@ async def export_page_html(site_id: str, page_id: str):
     )
 
 
-def generate_html_export(page: Dict[str, Any], site_name: str) -> str:
-    """Generate complete HTML from page data"""
+def generate_html_export(page: Dict[str, Any], site_name: str, use_external_css: bool = False) -> str:
+    """Generate complete HTML from page data
+    
+    Args:
+        page: Page data dictionary
+        site_name: Name of the site
+        use_external_css: If True, link to external styles.css instead of inline styles
+    """
     
     # Build blocks HTML
     blocks_html = ""
@@ -467,9 +473,15 @@ def generate_html_export(page: Dict[str, Any], site_name: str) -> str:
     </section>
 """
         elif block['type'] == 'image':
+            # Extract filename from full URL if it's a backend URL
+            image_src = block.get('content', 'placeholder.jpg')
+            if '/uploads/' in image_src:
+                # Extract just the filename and reference it from images folder
+                filename = image_src.split('/uploads/')[-1]
+                image_src = f"images/{filename}"
             blocks_html += f"""
     <section class="image-block">
-        <img src="{block.get('content', 'placeholder.jpg')}" alt="Image">
+        <img src="{image_src}" alt="Image">
     </section>
 """
         elif block['type'] == 'footer':
@@ -489,13 +501,20 @@ def generate_html_export(page: Dict[str, Any], site_name: str) -> str:
         meta_tags += f"""
     <meta name="description" content="{page['pageDescription']}">"""
     
+    # Handle social sharing image
     if page.get('socialSharingEnabled') and page.get('socialSharingImageUrl'):
+        social_image = page['socialSharingImageUrl']
+        if '/uploads/' in social_image:
+            # Convert to relative path for exported site
+            filename = social_image.split('/uploads/')[-1]
+            social_image = f"images/{filename}"
+        
         meta_tags += f"""
-    <meta property="og:image" content="{page['socialSharingImageUrl']}">
+    <meta property="og:image" content="{social_image}">
     <meta property="og:title" content="{page.get('name', 'Page')}">
     <meta property="og:description" content="{page.get('pageDescription', '')}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{page['socialSharingImageUrl']}">"""
+    <meta name="twitter:image" content="{social_image}">"""
     
     # Build complete HTML
     html = ""
@@ -506,17 +525,24 @@ def generate_html_export(page: Dict[str, Any], site_name: str) -> str:
     
     html += f"""<!DOCTYPE html>
 <html lang="en">
-<head>{meta_tags}
+<head>{meta_tags}"""
+    
+    # CSS - either external or inline
+    if use_external_css:
+        html += """
+    <link rel="stylesheet" href="styles.css">"""
+    else:
+        html += """
     <style>
-        body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; }}
-        .hero {{ background: #007bff; color: white; padding: 100px 20px; text-align: center; }}
-        .text-block {{ padding: 50px 20px; }}
-        .features {{ padding: 50px 20px; }}
-        .feature-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }}
-        .feature {{ padding: 20px; border: 1px solid #ddd; border-radius: 8px; }}
-        .image-block {{ text-align: center; padding: 20px; }}
-        .image-block img {{ max-width: 100%; height: auto; }}
-        footer {{ background: #333; color: white; text-align: center; padding: 20px; }}
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .hero { background: #007bff; color: white; padding: 100px 20px; text-align: center; }
+        .text-block { padding: 50px 20px; }
+        .features { padding: 50px 20px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .feature { padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .image-block { text-align: center; padding: 20px; }
+        .image-block img { max-width: 100%; height: auto; }
+        footer { background: #333; color: white; text-align: center; padding: 20px; }
     </style>"""
     
     # Inside <head> code
@@ -537,6 +563,81 @@ def generate_html_export(page: Dict[str, Any], site_name: str) -> str:
 </html>"""
     
     return html
+
+
+def generate_css_file() -> str:
+    """Generate external CSS file content"""
+    return """/* Site Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.hero {
+    background: #007bff;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.text-block {
+    padding: 50px 20px;
+}
+
+.features {
+    padding: 50px 20px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.feature {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.image-block {
+    text-align: center;
+    padding: 20px;
+}
+
+.image-block img {
+    max-width: 100%;
+    height: auto;
+}
+
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+"""
+
+
+def extract_image_urls_from_page(page: Dict[str, Any]) -> List[str]:
+    """Extract all image URLs from a page (blocks and social sharing)"""
+    image_urls = []
+    
+    # Extract from blocks
+    for block in page.get('blocks', []):
+        if block['type'] == 'image' and block.get('content'):
+            image_url = block.get('content')
+            if image_url and '/uploads/' in image_url:
+                image_urls.append(image_url)
+    
+    # Extract from social sharing
+    if page.get('socialSharingEnabled') and page.get('socialSharingImageUrl'):
+        social_img = page['socialSharingImageUrl']
+        if social_img and '/uploads/' in social_img:
+            image_urls.append(social_img)
+    
+    return image_urls
 
 
 # ============= ZIP EXPORT ENDPOINT =============
