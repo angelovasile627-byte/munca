@@ -137,6 +137,7 @@ class SiteSync(BaseModel):
     name: str
     status: str
     pages: List[Page]
+    siteStyles: Optional[SiteStyles] = Field(default_factory=SiteStyles)
 
 class StatusCheck(BaseModel):
     model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
