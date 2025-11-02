@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 Backend API Testing for Mobirise Builder Clone
-Tests FTP functionality endpoints
+Tests Enhanced FTP functionality and ZIP export endpoints
 """
 
 import requests
 import json
 import sys
 import os
+import zipfile
+import io
 from datetime import datetime
 
 # Get backend URL from frontend .env
