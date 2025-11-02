@@ -477,6 +477,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Implemented GET /api/sites/{site_id}/pages/{page_id}/export endpoint that generates complete HTML file with: before DOCTYPE code, meta tags (SEO + social sharing), inside <head> code, page blocks, end of <body> code. Returns downloadable HTML file."
+      - working: "NA"
+        agent: "main"
+        comment: "UPDATED: Enhanced generate_html_export() to support external CSS and relative image paths. Can now generate HTML with link to styles.css instead of inline styles. Image paths converted from absolute backend URLs to relative paths (images/filename.jpg)."
 
   - task: "MongoDB Page Schema Extension"
     implemented: true
