@@ -330,8 +330,8 @@ def cleanup_test_site(site_id):
             print("⚠️  Warning: Could not clean up test site")
 
 def main():
-    """Run all FTP functionality tests"""
-    print("🚀 Starting FTP Functionality Tests")
+    """Run all enhanced FTP functionality and ZIP export tests"""
+    print("🚀 Starting Enhanced FTP Functionality & ZIP Export Tests")
     print(f"Timestamp: {datetime.now().isoformat()}")
     print("=" * 60)
     
@@ -347,21 +347,27 @@ def main():
     site_id = create_test_site()
     
     if site_id:
-        # Test 4: FTP Publish Site
+        # Test 4: Add test page with content for better testing
+        add_test_page_with_content(site_id)
+        
+        # Test 5: Enhanced FTP Publish Site
         results.append(test_ftp_publish_site(site_id))
         
-        # Test 5: FTP Publish with invalid site ID
+        # Test 6: FTP Publish with invalid site ID
         results.append(test_ftp_publish_invalid_site())
+        
+        # Test 7: Enhanced ZIP Export
+        results.append(test_zip_export_enhancement(site_id))
         
         # Cleanup
         cleanup_test_site(site_id)
     else:
-        print("❌ Cannot test FTP publish without valid site")
-        results.extend([False, False])
+        print("❌ Cannot test FTP publish and ZIP export without valid site")
+        results.extend([False, False, False])
     
     # Summary
     print("\n" + "=" * 60)
-    print("📊 FTP FUNCTIONALITY TEST SUMMARY")
+    print("📊 ENHANCED FTP & ZIP EXPORT TEST SUMMARY")
     print("=" * 60)
     
     passed = sum(results)
@@ -371,9 +377,10 @@ def main():
     print(f"❌ Failed: {total - passed}/{total}")
     
     if passed == total:
-        print("\n🎉 ALL FTP TESTS PASSED!")
+        print("\n🎉 ALL ENHANCED TESTS PASSED!")
         print("✅ FTP Test Connection endpoint works correctly")
-        print("✅ FTP Publish Site endpoint works correctly") 
+        print("✅ Enhanced FTP Publish Site endpoint works correctly") 
+        print("✅ Enhanced ZIP Export endpoint works correctly")
         print("✅ Error handling works properly")
         return True
     else:
