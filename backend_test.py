@@ -122,29 +122,59 @@ def create_test_site():
         return None
 
 def test_ftp_publish_site(site_id):
-    """Test FTP publish site endpoint"""
-    print(f"\n🔧 Testing FTP Publish Site Endpoint (Site ID: {site_id})")
+    """Test enhanced FTP publish site endpoint"""
+    print(f"\n🔧 Testing Enhanced FTP Publish Site Endpoint (Site ID: {site_id})")
     print("-" * 40)
     
-    # Test with empty settings (as mentioned in review request)
-    ftp_settings = {}
+    # Test with proper FTP settings structure (fake credentials as per review request)
+    ftp_request = {
+        "ftpSettings": {
+            "protocol": "FTP",
+            "host": "ftp.example.com",
+            "port": 21,
+            "username": "testuser",
+            "password": "testpass",
+            "rootFolder": "/public_html"
+        },
+        "onlyChanges": False
+    }
     
     try:
-        response = requests.post(f"{API_URL}/sites/{site_id}/publish-ftp", json=ftp_settings, timeout=10)
+        response = requests.post(f"{API_URL}/sites/{site_id}/publish-ftp", json=ftp_request, timeout=30)
         
         print(f"Status Code: {response.status_code}")
         print(f"Response: {response.text}")
         
         if response.status_code == 200:
             response_data = response.json()
-            if "FTP credentials" in response_data.get("message", ""):
-                print("✅ PASS: Endpoint exists and returns proper message about FTP credentials")
+            
+            # Check for enhanced response format
+            required_fields = ["success", "message", "uploaded_files", "total_files", "host", "folder", "images_uploaded"]
+            missing_fields = [field for field in required_fields if field not in response_data]
+            
+            if missing_fields:
+                print(f"⚠️  WARNING: Missing enhanced response fields: {missing_fields}")
+                return False
+            else:
+                print("✅ PASS: Enhanced response format includes all required fields")
+                print(f"   - success: {response_data.get('success')}")
+                print(f"   - uploaded_files: {len(response_data.get('uploaded_files', []))}")
+                print(f"   - total_files: {response_data.get('total_files')}")
+                print(f"   - host: {response_data.get('host')}")
+                print(f"   - folder: {response_data.get('folder')}")
+                print(f"   - images_uploaded: {response_data.get('images_uploaded')}")
+                return True
+        elif response.status_code in [400, 500]:
+            # Expected for fake credentials - check if it's proper error handling
+            response_data = response.json() if response.headers.get('content-type', '').startswith('application/json') else {}
+            if "detail" in response_data:
+                print("✅ PASS: Endpoint properly handles FTP connection errors")
                 return True
             else:
-                print("✅ PASS: Endpoint exists and returns response")
-                return True
+                print(f"⚠️  WARNING: Unexpected error format")
+                return False
         else:
-            print(f"⚠️  WARNING: Unexpected status code {response.status_code}")
+            print(f"❌ FAIL: Unexpected status code {response.status_code}")
             return False
             
     except requests.exceptions.RequestException as e:
