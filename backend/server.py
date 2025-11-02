@@ -828,7 +828,7 @@ async def publish_site_via_ftp(site_id: str, request: FTPPublishRequest):
             if ftp_settings.rootFolder:
                 try:
                     ftp.cwd(ftp_settings.rootFolder)
-                except:
+                except ftplib.error_perm:
                     # Try to create the folder if it doesn't exist
                     try:
                         ftp.mkd(ftp_settings.rootFolder)
